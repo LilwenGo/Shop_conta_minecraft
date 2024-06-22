@@ -1,4 +1,19 @@
 {
-    "liveServer.settings.CustomBrowser": "chrome",
-    "liveServer.settings.root": "/public"
+    "workbench.colorTheme": "Default Dark Modern",
+    "liveServer.settings.donotShowInfoMsg": true,
+    "git.confirmSync": false,
+    "git.autofetch": true,
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "liveSassCompile.settings.formats": [
+
+        {
+            "format": "expanded",
+            "extensionName": ".css",
+            "savePath": "/public/style",
+            "savePathReplacementPairs": null
+        }
+    ],
+    "liveSassCompile.settings.generateMap": false
 }
