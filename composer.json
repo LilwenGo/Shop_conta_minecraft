@@ -1,0 +1,9 @@
+{
+    "name": "lilwengo/shop_conta_minecraft",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Project\\": "src/"
+        }
+    }
+}
