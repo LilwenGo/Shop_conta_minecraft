@@ -24,9 +24,9 @@ drop table if exists team;
 create table admin
 (
    id             int not null Auto_increment,
-   id_team              int not null,
-   login_admin          varchar(50) not null,
-   password_admin       varchar(255) not null,
+   id_team        int not null,
+   login          varchar(50) not null,
+   password       varchar(255) not null,
    primary key (id)
 )Engine = InnoDB;
 
@@ -36,7 +36,7 @@ create table admin
 create table category
 (
    id          int not null Auto_increment,
-   libelle_category     varchar(50) not null,
+   libelle     varchar(50) not null,
    primary key (id)
 )Engine = InnoDB;
 
@@ -45,10 +45,11 @@ create table category
 /*==============================================================*/
 create table item
 (
-   id              int not null Auto_increment,
+   id                   int not null Auto_increment,
    id_category          int not null,
-   libelle_item         varchar(50) not null,
-   price_item           decimal not null,
+   libelle              varchar(50) not null,
+   price                decimal(10,2) not null,
+   total_selled         int not null,
    primary key (id)
 )Engine = InnoDB;
 
@@ -70,7 +71,7 @@ create table membre
 (
    id            int not null Auto_increment,
    id_team              int not null,
-   name_membre          varchar(50) not null,
+   name          varchar(50) not null,
    primary key (id)
 )Engine = InnoDB;
 
@@ -82,6 +83,7 @@ create table item_membre
    id_membre            int not null,
    id_item              int not null,
    quantity             int not null,
+   refunded             int not null,
    primary key (id_membre, id_item)
 )Engine = InnoDB;
 
@@ -91,8 +93,8 @@ create table item_membre
 create table team
 (
    id              int not null Auto_increment,
-   login_team           varchar(50) not null,
-   password_team        varchar(255) not null,
+   login           varchar(50) not null,
+   password        varchar(255) not null,
    primary key (id)
 )Engine = InnoDB;
 
