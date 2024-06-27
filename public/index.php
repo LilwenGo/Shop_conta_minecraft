@@ -7,6 +7,6 @@ require '../vendor/autoload.php';
 require SRC . 'helper.php';
 
 $router = new Project\Router($_SERVER["REQUEST_URI"]);
-$router->get('/', "TodoController@index");
+$router->get('/', "TeamController@index");
 
 $router->run();
