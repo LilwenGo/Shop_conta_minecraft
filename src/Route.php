@@ -1,19 +1,34 @@
 <?php
 namespace Project;
 
+/** Class Route */
 class Route {
 
-    private $path;
-    private $callable;
-    private $matches = [];
-    private $params = [];
+    /**
+     * Route's url
+     */
+    private string $path;
+    /**
+     * Method to call
+     */
+    private string $callable;
+    /**
+     * Array containing the queries
+     */
+    private array $matches = [];
 
-    public function __construct($path, $callable){
+    /**
+     * Set the path and the callable
+     */
+    public function __construct(string $path, string $callable) {
         $this->path = trim($path, '/');
         $this->callable = $callable;
     }
 
-    public function match($url){
+    /**
+     * Verify the route match the passed url
+     */
+    public function match(string $url): bool{
         $url = trim($url, '/');
         $path = preg_replace('#:([\w]+)#', '([^/]+)', $this->path);
         $regex = "#^$path$#i";
@@ -25,9 +40,12 @@ class Route {
         return true;
     }
 
-    public function call() {
+    /**
+     * Call the method of the callable
+     */
+    public function call(): void {
          $rep = explode("@", $this->callable);
-         $controller = "Todo\\Controllers\\".$rep[0];
+         $controller = "Project\\Controllers\\".$rep[0];
          $controller = new $controller();
 
         return call_user_func_array([$controller, $rep[1]], $this->matches);

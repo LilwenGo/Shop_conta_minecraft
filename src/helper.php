@@ -1,17 +1,28 @@
 <?php
-
+/**
+ * Return the passed field's error if exists
+ */
 function error($field) {
     return isset($_SESSION["error"][$field]) ? $_SESSION["error"][$field]: "";
 }
 
+/**
+ * Return the passed field's old value if exists
+ */
 function old($field) {
     return isset($_SESSION["old"][$field]) ? $_SESSION["old"][$field] : "";
 }
 
+/**
+ * Return a secure version of the passed string
+ */
 function escape($data) {
     return stripslashes(trim(htmlspecialchars($data)));
 }
 
+/**
+ * Return the passed string without unkown characters
+ */
 function slugify($str) {
     // replace non letter or digits by -
     $str = preg_replace('~[^\pL\d]+~u', '-', $str);
