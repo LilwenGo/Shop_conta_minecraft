@@ -1,11 +1,14 @@
 <?php
 namespace Project\Models;
 
+/**Class Team */
 class Team {
+    //Properties
     private int $id;
     private string $login;
     private string $password;
 
+    //Accessors
     public function getId(): int {
         return $this->id;
     }
