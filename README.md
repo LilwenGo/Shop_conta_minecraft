@@ -1,52 +1,65 @@
-# Création d'une Todo liste
+# Project shop_conta_minecraft
 
-**Prérequis**: Base PHP, les objets, le modèle MVC, la validation
+**Required**: PHP bases, Object Oriented Programmation, MVC pattern
 
-**Objectif**: Savoir utiliser toutes les connaissances jusque là accumulé (voir prérequis)
+## Stape 1 - Architecture
 
-Dans cet exercice, nous allons créer une app qui permettra aux utilisateur de s'inscrire et de créer des todo listes.
-
-## Etape 1 - La structure de fichiers
-
-Notre application aura la stucture suivante
+The app have the following structure
 
 ```
-TodoList
+Shop_conta_minecraft
     public/
+        .htaccess
         index.php
         style.css
     src/
+        config/
+            config.php
         Controllers/
-            UserController.php
-            TodoController.php
+            AdminController.php
+            CategoryController.php
+            Controller.php
+            ItemController.php
+            MembreController.php
+            TeamController.php
         Models/
-            User.php
-            Todo.php
-            Task.php
-            UserManager.php
-            TodoManager.php
-            TaskManager.php
+            Admin.php
+            AdminManager.php
+            Category.php
+            CategoryManager.php
+            Item.php
+            ItemManager.php
+            Manager.php
+            Membre.php
+            MembreManager.php
+            Team.php
+            TeamManager.php
+        scss/
+            style.scss
         Views/
-            Auth/
+            Team/
+                edit.php
                 login.php
                 register.php
-            Todo/
-                index.php
-                show.php
-                create.php
+            404.php
+            index.php
+            layout.php
+        helper.php
+        Route.php
         Router.php
+        Validator.php
 ```
 
-## Etape 2 - Composer et l'autoloading
+## Stape 2 - Composer and autolod
 
-- Initialiser le dossier comme étant un projet composer
+- Init the directory like a composer project
 
 ```shell
-$ composer init  # crée le fichier composer.json
-$ composer install # install l'autoloader
+$ composer init  # create the file composer.json
+$ composer install # install dependencies and autoload
 ```
 
-- Remplir le fichier composer avec la règle d'autoloading
+- Fill the composer.json with autoload rule
 
 ```json
 "autoload": {
@@ -56,60 +69,62 @@ $ composer install # install l'autoloader
 }
 ```
 
-- Réinitialiser l'autoloader
+- Reset autoload
 
 ```shell
 $ composer dump-autoload
 ```
 
-- lancer php -S localhost:8000 dans le dossier public
+- Launch the project locally
 
 ```shell
 $ cd public
 $ php -S localhost:8000
 ```
+or
+```shell
+$ php -S localhost:8000 -t public
+```
 
-## Etape 3 - Le router
+## Stape 3 - The router
 
+To create a route, you have to type this code into the file index.php in the public directory:
+```php
+$router = new Project\Router($_SERVER["REQUEST_URI"]);
 
+//This line for a GET route
+$router->get('route', 'Controller@method');
 
-Voici une liste de route que l'on peut implementer:
+//This line for a POST route
+$router->post('route', 'Controller@method');
+ ```
 
-- "/dashboard/{todo}task/{task}, GET => montre le détail d'une tache
-- "/dashboard/task/nouveau, GET => création d'une tache
-- "/dashboard/task/nouveau, POST => crée la tache en base dde données
-- "/dashboard/{todo}/task/{task}, POST => met en jour la tache
-- "/dashboard/{todo}/task/{task}/delete => supprime la tache
+There are some examples of routes (not in this project):
 
-## Etape 3 - Les Models
+- "/dashboard/:todoid/task/taskid, GET
+- "/dashboard/task/nouveau, GET
+- "/dashboard/task/nouveau, POST
+- "/dashboard/:todoid/task/:taskid, POST
+- "/dashboard/:todoid/task/:taskid/delete GET
 
-Création des entitées  `Task` et des managers  `TaskManager``
+The :properties are the route's queries you cannot send the queries by ?param=something&...
 
-Pour les manager, on va pouvoir implementer les methodes:
+## Stape 4 - Models
 
-- `find($name, $listid)` => retrouve une entité grâce à son id
-- `check($slug)` => retrouve une entité grâce à n'importe quel champs renseigné
-- `getall($id)` => retrouve toutes les entité
-- `store()` => enregistre une entité
-- `update($param)` => met à jour une entité
-- `delete($param)`=> supprime une entité
+Models regroup all the methods interacting with the database
+- Managers: methods that direct interact, requests sql
+- Models: represents a table line
 
-## Etape 4 - Le controller
+In this project managers must be named like SomethingManager and extends Manager, the models don't have a specific name 
 
-Créer un `TodoController` avec les methodes suivante:
+## Stape 5 - Controllers
 
+Controllers regroup all the methods that don't interact with the database
 
-- `store()`=> enregistre la todoliste
-- `check($param)` => formulaire pour editer la todoliste
-- `update($param)`=> met à jour la todoliste
-- `delete($param)`=> supprime la todo liste
+In this project controllers must be named like SomethingController, extends Controller, and have a constructor that instantiate the manager and call the parent's contructor
 
-## Etape 5 - Les views
+## Stape 6 - Views
 
-Création des vues avec le framework css de votre choix
+Views are files that are used for the frontend dev, they contain html/js/php
 
-
-- "index" => montre toutes les todo liste avec leur tache
-- "show" => montre une seule todo liste avec ses taches
-- "create task" => montre le formulaire de création d'une tache
-- "edit" => montre le formulaire d'edition d'une tache 
+Views are called by the controllers with the method Controller::render('viewPath', data) (the data is optional it serves to send the variables values to the view)
