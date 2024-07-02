@@ -43,7 +43,7 @@ class Router {
     /**
      * Run the matching route
      */
-    public function run(): void {
+    public function run() {
         if(isset($this->routes[$_SERVER['REQUEST_METHOD']])){
             foreach($this->routes[$_SERVER['REQUEST_METHOD']] as $route){
                 if($route->match($this->url)){

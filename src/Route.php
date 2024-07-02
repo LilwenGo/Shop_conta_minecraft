@@ -43,7 +43,7 @@ class Route {
     /**
      * Call the method of the callable
      */
-    public function call(): void {
+    public function call() {
          $rep = explode("@", $this->callable);
          $controller = "Project\\Controllers\\".$rep[0];
          $controller = new $controller();
