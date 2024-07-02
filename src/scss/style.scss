@@ -1,0 +1,117 @@
+@use '_abstract' as *;
+
+@mixin flex-x($wrap: nowrap) {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: $wrap;
+}
+
+@mixin flex-y($wrap: nowrap) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: $wrap;
+}
+
+@mixin section($color) {
+    background-color: $color;
+    padding: 3rem;
+    border-radius: 3rem;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Pixelify Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+body {
+    margin: 0;
+    padding-top: 90px;
+    min-height: calc(100vh - 90px);
+    background-image: url(/img/back.webp);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover
+}
+
+header {
+    @include flex-x();
+    justify-content: space-between;
+    padding: 0.5rem 3rem;
+    background-color: lighten($color-purple, 40%);
+    box-shadow: $color-black 0 4px 20px 2px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: calc(100vw - 6rem);
+    z-index: 10;
+    nav {
+        @include flex-x();
+        gap: 2rem;
+    }
+}
+
+h1 {
+    font-size: $font-xl;
+}
+
+.logo img {
+    width: 5rem;
+}
+
+.icon {
+    color: $color-white;
+    font-size: x-large;
+    transition: color 500ms;
+    &:hover {
+        color: $color-yellow;
+    }
+}
+
+main {
+    min-height: calc(100vh - 90px);
+    @include flex-x();
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.section {
+    &-white {
+        @include section($color-white);
+    }
+    &-yellow {
+        @include section($color-yellow);
+    }
+    &-green {
+        @include section($color-green);
+    }
+    &-blue {
+        @include section($color-blue);
+    }
+    &-purple {
+        @include section($color-purple);
+    }
+}
+
+::-webkit-scrollbar {
+    width: 13px;
+    height: 13px;
+  
+    &-track {
+      background-color: lighten($color-blue, 20%);
+    }
+  
+    &-thumb {
+      background-color: lighten($color-purple, 40%);
+      border-radius: 1rem;
+  
+      &:active {
+        background-color: lighten($color-purple, 30%);
+      }
+    }
+  }
