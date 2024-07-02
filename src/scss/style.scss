@@ -20,12 +20,32 @@
     border-radius: 3rem;
 }
 
+@mixin btn($color) {
+    background-color: $color;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    font-size: $font-s;
+    border: $color-black 2px solid;
+    display: block;
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+    &:hover {
+        background-color: darken($color, 10%);
+    }
+}
+
 * {
     margin: 0;
     padding: 0;
     font-family: "Pixelify Sans", sans-serif;
     font-weight: 400;
     font-style: normal;
+    overflow-wrap: break-word;
+}
+
+p, span, a {
+    font-size: $font-s;
 }
 
 body {
@@ -35,6 +55,7 @@ body {
     background-image: url(/img/back.webp);
     background-repeat: no-repeat;
     background-attachment: fixed;
+    background-position: center;
     background-size: cover
 }
 
@@ -42,7 +63,7 @@ header {
     @include flex-x();
     justify-content: space-between;
     padding: 0.5rem 3rem;
-    background-color: lighten($color-purple, 40%);
+    background-color: $color-purple;
     box-shadow: $color-black 0 4px 20px 2px;
     position: fixed;
     top: 0;
@@ -74,10 +95,12 @@ h1 {
 
 main {
     min-height: calc(100vh - 90px);
-    @include flex-x();
+    padding: 0 3rem;
+    @include flex-y();
     justify-content: center;
     align-items: center;
     text-align: center;
+    gap: 10px;
 }
 
 .section {
@@ -96,6 +119,32 @@ main {
     &-purple {
         @include section($color-purple);
     }
+    &-flex-x {
+        @include flex-x();
+        gap: 10px;
+    }
+    &-flex-y {
+        @include flex-y();
+        gap: 10px;
+    }
+}
+
+.btn {
+    &-white {
+        @include btn($color-white);
+    }
+    &-yellow {
+        @include btn($color-yellow);
+    }
+    &-green {
+        @include btn($color-green);
+    }
+    &-blue {
+        @include btn($color-blue);
+    }
+    &-purple {
+        @include btn($color-purple);
+    }
 }
 
 ::-webkit-scrollbar {
@@ -107,11 +156,11 @@ main {
     }
   
     &-thumb {
-      background-color: lighten($color-purple, 40%);
+      background-color: darken($color-purple, 10%);
       border-radius: 1rem;
   
       &:active {
-        background-color: lighten($color-purple, 30%);
+        background-color: darken($color-purple, 20%);
       }
     }
   }
