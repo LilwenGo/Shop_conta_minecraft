@@ -41,3 +41,19 @@ function slugify($str) {
     }
     return $str;
 }
+
+/**
+ * Verify if user is team admin
+ */
+function isTeamAdmin() {
+    if(isset($_SESSION['team'])) {
+        if(isset($_SESSION['admin'])) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        header('Location: /team/login');
+        die();
+    }
+}
