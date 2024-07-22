@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Shop conta Minecraft</title>
+    <title>Shop compta Minecraft</title>
     <script src="https://kit.fontawesome.com/c1d0ab37d6.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/style/style.css">
     <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
@@ -17,11 +17,11 @@
             <?php
                 if (isset($_SESSION["team"])) {
             ?>
-                    <a href="/logout" class="icon" title="Se deconnecter"><i class="fas fa-power-off"></i></a>
+                    <a href="/team/logout" class="icon" title="Se deconnecter"><i class="fas fa-power-off"></i></a>
             <?php
                 } else {
             ?>
-                    <a href="/login" class="icon" title="Se connecter"><i class="fas fa-user-tie"></i></a>
+                    <a href="/team/login" class="icon" title="Se connecter"><i class="fas fa-users"></i></a>
             <?php
                 }
             ?>
