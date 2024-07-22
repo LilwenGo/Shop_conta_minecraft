@@ -18,10 +18,12 @@
     background-color: $color;
     padding: 3rem;
     border-radius: 3rem;
+    box-shadow: $color-black 0 4px 20px 2px;
 }
 
-@mixin btn($color) {
+@mixin btn($color, $b-color: darken($color, 10%)) {
     background-color: $color;
+    transition: background-color 250ms;
     padding: 0.5rem;
     border-radius: 0.5rem;
     font-size: $font-s;
@@ -31,7 +33,7 @@
     color: black;
     cursor: pointer;
     &:hover {
-        background-color: darken($color, 10%);
+        background-color: $b-color;
     }
 }
 
@@ -93,6 +95,10 @@ h1 {
     }
 }
 
+.icon-img {
+    width: 1.5rem;
+}
+
 main {
     min-height: calc(100vh - 90px);
     padding: 0 3rem;
@@ -134,7 +140,7 @@ main {
         @include btn($color-white);
     }
     &-yellow {
-        @include btn($color-yellow);
+        @include btn($color-yellow, $color-orange);
     }
     &-green {
         @include btn($color-green);
@@ -142,8 +148,85 @@ main {
     &-blue {
         @include btn($color-blue);
     }
+    &-orange {
+        @include btn($color-orange);
+    }
+    &-red {
+        @include btn($color-red);
+    }
     &-purple {
         @include btn($color-purple);
+    }
+}
+
+.text {
+    &-xl {
+        font-size: $font-xl;
+    }
+    &-l {
+        font-size: $font-l;
+    }
+    &-m {
+        font-size: $font-m;
+    }
+    &-s {
+        font-size: $font-s;
+    }
+    &-xs {
+        font-size: $font-xs;
+    }
+}
+
+.form {
+    @include flex-y();
+    gap: 0.5rem;
+    .input {
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        font-size: $font-s;
+        border: $color-black 2px solid;
+        display: block;
+        text-decoration: none;
+        color: black;
+    }
+}
+
+.table {
+    border-radius: 1rem;
+    overflow: hidden;
+    border-collapse: collapse;
+    background-color: $color-blue;
+    &, thead, tbody, td, th {
+        border: darken($color-green, 15%) 5px solid;
+    }
+    td, th {
+        font-size: $font-s;
+        padding: 0.5rem;
+        div {
+            @include flex-x();
+            gap: 0.5rem;
+        }
+    }
+    th {
+        font-weight: bold;
+    }
+}
+
+.error {
+    color: $color-red;
+    &:empty {
+        display: none;
+    }
+}
+
+.important {
+    background-color: $color-yellow;
+    border: darken($color-yellow, 20%) 2px solid;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    color: $color-black;
+    &:empty {
+        display: none;
     }
 }
 
