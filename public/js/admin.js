@@ -14,6 +14,9 @@ form.addEventListener('submit', (e) => {
     return;
 })
 
+/**
+ * Send a request for admin backend insertion and display it
+ */
 function createAdmin() {
     //Get the data from the form
     let data = new FormData();
@@ -35,14 +38,70 @@ function createAdmin() {
     });
 }
 
+let editId = null;
+let editName = null;
+/**
+ * Change the tr for edition
+ * @param {*} id 
+ */
 function editAdmin(id) {
-
+    if(editId != null && editName != null) {
+        //Reset the unupdated tds if exists
+        let nameTd = document.getElementById('name' + editId);
+        let button = document.getElementById('editButton' + editId);
+        if(nameTd && button) {
+            nameTd.innerHTML = editName;
+            button.innerText = "Modifier";
+            button.setAttribute("onclick", `editAdmin(${editId})`);
+        }
+    }
+    let newNameTd = document.getElementById('name' + id);
+    let newButton = document.getElementById('editButton' + id);
+    editId = id;
+    editName = newNameTd.innerHTML;
+    newNameTd.innerHTML = `<input type="text" class="text-xs" name="name${id}" id="inputName${id}" value="${editName}">`;
+    newButton.innerText = "Valider";
+    //Change the action button
+    newButton.setAttribute('onclick', `updateAdmin(${id})`);
 }
 
-function updateAdmin(id) {
-
+/**
+ * Update the admin
+ * @param {int} id id
+ */
+async function updateAdmin(id) {
+    const name = document.getElementById('inputName' + id);
+    if(name) {
+        //Get the data
+        let formData = new FormData();
+        formData.append("name", name.value);
+        //Make the request
+        let res = await fetch(`/admins/${id}/update`, {
+            body: formData,
+            method: "POST"
+        });
+        //Convert to json
+        let data = await res.json();
+        //If successfull
+        if(data.success) {
+            //Update the tr
+            const nameTd = document.getElementById('name' + id);
+            nameTd.innerHTML = name.value;
+            editName = null;
+            //Reset the button
+            const button = document.getElementById('editButton' + id);
+            button.innerText = "Modifier";
+            button.setAttribute('onclick', `editBoisson(${id})`);
+        } else if(data.errors) {
+            displayErrors(data.errors);
+        }
+    }
 }
 
+/**
+ * Send a request and delete the admin with matching id
+ * @param {int} id id
+ */
 function deleteAdmin(id) {
     //Ajax request
     fetch(`/admins/${id}/delete`, {
@@ -100,6 +159,7 @@ function addTr(id, name) {
     //Append the name's td
     const username = document.createElement('td');
     username.appendChild(document.createTextNode(name));
+    username.setAttribute('id', `name${id}`);
     tr.appendChild(username);
     //Append the buttons td
     const actions = document.createElement('td');
@@ -109,6 +169,7 @@ function addTr(id, name) {
     btnUpdate.classList.add('btn-yellow');
     btnUpdate.classList.add('text-xs');
     btnUpdate.setAttribute('onclick', `editAdmin(${id})`);
+    btnUpdate.setAttribute('id', `editButton${id}`);
     btnUpdate.append(document.createTextNode('Modifier'));
     div.append(btnUpdate);
     //Create the delete button 

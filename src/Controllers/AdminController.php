@@ -78,9 +78,49 @@ class AdminController extends Controller {
             ]);
 
             if(!$this->validator->errors()) {
-                $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
-                $id = $this->manager->create($_SESSION['team']['id'], $_POST['name'], $password);
-                echo json_encode(['success' => true, 'data' => ['id' => $id]]);
+                $admin = $this->manager->getByLogin($_POST['name']);
+                if(!$admin) {
+                    $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
+                    $id = $this->manager->create($_SESSION['team']['id'], $_POST['name'], $password);
+                    echo json_encode(['success' => true, 'data' => ['id' => $id]]);
+                } else {
+                    echo json_encode(['success' => false, 'errors' => ['name' => 'Ce nom d\'administrateur est déja pris !']]);
+                }
+            } else {
+                echo json_encode(['success' => false, 'errors' => $_SESSION['error']]);
+                unset($_SESSION['error']);
+            }
+        } else {
+            echo json_encode(['success' => false, 'errors' => ['message' => 'Vous n\'avez pas l\'abilitation !']]);
+        }
+    }
+
+    /**
+     * Update the admin with matching id if valid
+     */
+    public function update(int $id): void {
+        if(isTeamAdmin()) {
+            $this->validator->validate([
+                'name' => ['required', 'min:3', 'max:50', 'alphaNum']
+            ]);
+
+            if(!$this->validator->errors()) {
+                $admin = $this->manager->getByLogin($_POST['name']);
+                if(!$admin) {
+                    $admin = $this->manager->find($id);
+                    if($admin) {
+                        $success = $this->manager->update($id, $_POST['name'], $admin->getPassword());
+                        if($success !== 0) {
+                            echo json_encode(['success' => true]);
+                        } else {
+                            echo json_encode(['success' => false, 'errors' => ['message' => 'Une erreur est survenue !']]);
+                        }
+                    } else {
+                        echo json_encode(['success' => false, 'errors' => ['message' => 'L\'administrateur n\'a pas été trouvé !']]);
+                    }
+                } else {
+                    echo json_encode(['success' => false, 'errors' => ['name' => 'Ce nom d\'administrateur est déja pris !']]);
+                }
             } else {
                 echo json_encode(['success' => false, 'errors' => $_SESSION['error']]);
                 unset($_SESSION['error']);

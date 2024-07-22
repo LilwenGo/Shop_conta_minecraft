@@ -1,5 +1,6 @@
 <section class="section-purple section-flex-y">
     <h1>Gestion administrateur</h1>
+    <p class="text-s">Bienvenue dans la gestion administrateur. Ici vous pouvez ajouter/modifier/supprimer les administrateurs. (Les mots de passe ne sont pas modifiables)</p>
     <table class="table">
         <thead>
             <tr>
@@ -13,10 +14,10 @@
             foreach($admins as $admin) {?>
                 <tr id="admin<?= $admin->getId();?>">
                     <td><?= $admin->getId();?></td>
-                    <td><?= $admin->getLogin();?></td>
+                    <td id="name<?= $admin->getId();?>"><?= $admin->getLogin();?></td>
                     <td>
                         <div>
-                            <button class="btn-yellow text-xs" onclick="editAdmin(<?= $admin->getId();?>)">Modifier</button>
+                            <button class="btn-yellow text-xs" onclick="editAdmin(<?= $admin->getId();?>)" id="editButton<?= $admin->getId();?>">Modifier</button>
                             <button class="btn-red text-xs" onclick="deleteAdmin(<?= $admin->getId();?>)"><img src="/img/trash.png" alt="Icone poubelle" class="icon-img"></button>
                         </div>
                     </td>

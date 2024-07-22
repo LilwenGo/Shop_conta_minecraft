@@ -63,13 +63,14 @@ class AdminManager extends Manager {
     /**
      * Update a admin from the database
      */
-    public function update(int $id, string $login, string $password): void {
+    public function update(int $id, string $login, string $password): int {
         $stmt = $this->db->prepare('UPDATE admin SET login = ?, password = ? WHERE id = ?');
         $stmt->execute([
             $login,
             $password,
             $id
         ]);
+        return $stmt->rowCount();
     }
 
     /**
