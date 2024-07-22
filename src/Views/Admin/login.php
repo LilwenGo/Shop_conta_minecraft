@@ -5,7 +5,7 @@
         <input type="text" name="name" id="name" value="<?= old('name');?>" class="input" autocomplete="off">
         <span class="error text-xs"><?= error('name');?></span>
         <label for="password" class="text-s">Mot de passe:</label>
-        <input type="password" name="password" id="password" value="<?= old('password');?>" class="input">
+        <input type="password" name="password" id="password" value="<?= old('password');?>" class="input" autocomplete="current-password">
         <span class="error text-xs"><?= error('password');?></span>
         <input type="submit" value="Valider" name="ok" class="btn-blue">
     </form>

@@ -1,5 +1,5 @@
 <section class="section-purple section-flex-y">
-    <h1>Gestion administrateur</h1>
+    <h1>Gestion administrateurs</h1>
     <p class="text-s">Bienvenue dans la gestion administrateur. Ici vous pouvez ajouter/modifier/supprimer les administrateurs. (Les mots de passe ne sont pas modifiables)</p>
     <table class="table">
         <thead>
