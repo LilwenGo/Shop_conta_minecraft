@@ -19,6 +19,7 @@
     padding: 3rem;
     border-radius: 3rem;
     box-shadow: $color-black 0 4px 20px 2px;
+    width: min-content;
 }
 
 @mixin btn($color, $b-color: darken($color, 10%)) {
@@ -175,6 +176,10 @@ main {
     &-xs {
         font-size: $font-xs;
     }
+}
+
+.minimised {
+    max-width: 100%;
 }
 
 .form {
