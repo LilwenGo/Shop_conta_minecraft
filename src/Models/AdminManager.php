@@ -71,4 +71,16 @@ class AdminManager extends Manager {
             $id
         ]);
     }
+
+    /**
+     * Delete an admin from the database
+     */
+    public function delete(int $id, int $id_team): int {
+        $stmt = $this->db->prepare('DELETE FROM admin WHERE id = ? AND id_team = ?');
+        $stmt->execute([
+            $id,
+            $id_team
+        ]);
+        return $stmt->rowCount();
+    }
 }

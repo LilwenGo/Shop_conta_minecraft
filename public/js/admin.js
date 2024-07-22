@@ -30,12 +30,7 @@ function createAdmin() {
             inputName.value = '';
             inputPassword.value = '';
         } else if(jsonRes.errors) {
-            for(let span of errorsSpan) {
-                span.innerText = '';
-            }
-            for(let error in jsonRes.errors) {
-                displayError(error, jsonRes.errors[error]);
-            }
+            displayErrors(jsonRes.errors);
         }
     });
 }
@@ -49,7 +44,33 @@ function updateAdmin(id) {
 }
 
 function deleteAdmin(id) {
+    //Ajax request
+    fetch(`/admins/${id}/delete`, {
+        method: "GET"
+    }).then(async (response) => {
+        let jsonRes = await response.json();
+        if(jsonRes.success) {
+            removeTr(id);
+        } else if(jsonRes.errors) {
+            displayErrors(jsonRes.errors);
+        }
+    });
+}
 
+/**
+ * Display all the gived errors
+ */
+function displayErrors(errors) {
+    for(let span of errorsSpan) {
+        span.innerText = '';
+    }
+    for(let error in errors) {
+        if(error === 'message') {
+            alert(errors[error]);
+        } else {
+            displayError(error, errors[error]);
+        }
+    }
 }
 
 /**
@@ -105,4 +126,15 @@ function addTr(id, name) {
     tr.append(actions);
     //Append the tr
     tbody.append(tr);
+}
+
+/**
+ * Remove a tr from the table
+ * @param {int} id id
+ */
+function removeTr(id) {
+    //Get the tr
+    const tr = document.getElementById(`admin${id}`);
+    //Delete the tr
+    tr.remove();
 }

@@ -86,7 +86,23 @@ class AdminController extends Controller {
                 unset($_SESSION['error']);
             }
         } else {
-            echo json_encode(['success' => false, 'errors' => ['name' => 'Vous n\'avez pas l\'abilitation !']]);
+            echo json_encode(['success' => false, 'errors' => ['message' => 'Vous n\'avez pas l\'abilitation !']]);
+        }
+    }
+
+    /**
+     * Delete the admin with matching id
+     */
+    public function delete(int $id): void {
+        if(isTeamAdmin()) {
+            $success = $this->manager->delete($id, $_SESSION['team']['id']);
+            if($success !== 0) {
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['success' => false, 'errors' => ['message' => 'Une erreur est survenue !']]);
+            }
+        } else {
+            echo json_encode(['success' => false, 'errors' => ['message' => 'Vous n\'avez pas l\'abilitation !']]);
         }
     }
 
