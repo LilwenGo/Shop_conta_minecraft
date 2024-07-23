@@ -10,7 +10,7 @@ $router = new Project\Router($_SERVER["REQUEST_URI"]);
 //Home
 $router->get('/', "TeamController@index");
 
-//Team
+//Teams
 $router->get('/team/', "TeamController@show");
 $router->get('/team/attempt/', "TeamController@update");
 $router->get('/team/logout/', "TeamController@logout");
@@ -33,5 +33,11 @@ $router->get('/membres/', "MembreController@index");
 $router->post('/membres/create/', "MembreController@store");
 $router->post('/membres/:id/update/', "MembreController@update");
 $router->get('/membres/:id/delete/', "MembreController@delete");
+
+//Categories
+$router->get('/categories/', "CategoryController@index");
+$router->post('/categories/create/', "CategoryController@store");
+$router->post('/categories/:id/update/', "CategoryController@update");
+$router->get('/categories/:id/delete/', "CategoryController@delete");
 
 $router->run();
