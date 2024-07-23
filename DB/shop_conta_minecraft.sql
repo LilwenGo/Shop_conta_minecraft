@@ -36,6 +36,7 @@ create table admin
 create table category
 (
    id          int not null Auto_increment,
+   id_team     int not null,
    libelle     varchar(50) not null,
    primary key (id)
 )Engine = InnoDB;
@@ -46,6 +47,7 @@ create table category
 create table item
 (
    id                   int not null Auto_increment,
+   id_team              int not null,
    id_category          int not null,
    libelle              varchar(50) not null,
    price                decimal(10,2) not null,
@@ -104,6 +106,9 @@ alter table admin add constraint FK_CREATE foreign key (id_team)
 alter table item add constraint FK_SORT foreign key (id_category)
       references category (id) on delete cascade on update restrict;
 
+alter table item add constraint FK_SELECT foreign key (id_team)
+      references team (id) on delete cascade on update restrict;
+
 alter table category_membre add constraint FK_category_membre foreign key (id_membre)
       references membre (id) on delete cascade on update restrict;
 
@@ -111,6 +116,9 @@ alter table category_membre add constraint FK_category_membre2 foreign key (id_c
       references category (id) on delete cascade on update restrict;
 
 alter table membre add constraint FK_HIRE foreign key (id_team)
+      references team (id) on delete cascade on update restrict;
+
+alter table category add constraint FK_ADD foreign key (id_team)
       references team (id) on delete cascade on update restrict;
 
 alter table item_membre add constraint FK_item_membre foreign key (id_item)
