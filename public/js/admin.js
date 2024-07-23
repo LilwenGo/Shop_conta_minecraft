@@ -91,7 +91,7 @@ async function updateAdmin(id) {
             //Reset the button
             const button = document.getElementById('editButton' + id);
             button.innerText = "Modifier";
-            button.setAttribute('onclick', `editBoisson(${id})`);
+            button.setAttribute('onclick', `editAdmin(${id})`);
         } else if(data.errors) {
             displayErrors(data.errors);
         }
