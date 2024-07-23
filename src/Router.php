@@ -51,7 +51,7 @@ class Router {
                 }
             }
         }
-        Controller::render('404');
+        Controller::render('error', ['code' => 404, 'message' => 'La page recherchée n\'existe pas !']);
     }
 
 }
