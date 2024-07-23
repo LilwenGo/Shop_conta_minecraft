@@ -1,6 +1,6 @@
 <section class="section-purple section-flex-y">
     <h1>Créer une équipe</h1>
-    <p class="text-xs important">Attention: le nom d'équipe ne pourra pas être modifié !</p>
+    <p class="text-xs important">Attention: le nom d'équipe et le mot de passe ne pourront pas être modifiés !</p>
     <form class="form" action="/team/register/attempt" method="post" enctype="multipart/form-data">
         <label for="name" class="text-s">Nom d'équipe:</label>
         <input type="text" name="name" id="name" value="<?= old('name');?>" class="input" autocomplete="off">

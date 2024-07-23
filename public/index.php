@@ -32,6 +32,6 @@ $router->get('/admins/logout', "AdminController@logout");
 $router->get('/membres/', "MembreController@index");
 $router->post('/membres/create/', "MembreController@store");
 $router->post('/membres/:id/update/', "MembreController@update");
-$router->post('/membres/:id/delete/', "MembreController@delete");
+$router->get('/membres/:id/delete/', "MembreController@delete");
 
 $router->run();

@@ -37,7 +37,7 @@ class MembreManager extends Manager {
     /**
      * Store a membre in the database
      */
-    public function create(int $id_team,string $name): int {
+    public function create(int $id_team, string $name): int {
         $stmt = $this->db->prepare('INSERT INTO membre(id_team, name) VALUES (?,?)');
         $stmt->execute([
             $id_team,
@@ -49,11 +49,24 @@ class MembreManager extends Manager {
     /**
      * Update a membre from the database
      */
-    public function update(int $id, string $name): void {
+    public function update(int $id, string $name): int {
         $stmt = $this->db->prepare('UPDATE membre SET name = ? WHERE id = ?');
         $stmt->execute([
             $name,
             $id
         ]);
+        return $stmt->rowCount();
+    }
+
+    /**
+     * Delete a membre from the database
+     */
+    public function delete(int $id): int {
+        $stmt = $this->db->prepare('DELETE FROM membre WHERE id = ? AND id_team = ?');
+        $stmt->execute([
+            $id,
+            $_SESSION['team']['id']
+        ]);
+        return $stmt->rowCount();
     }
 }
