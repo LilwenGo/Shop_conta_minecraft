@@ -17,11 +17,26 @@
             <?php
                 if (isset($_SESSION["team"])) {
             ?>
-                    <a href="/team/logout" class="icon" title="Se deconnecter"><i class="fas fa-power-off"></i></a>
+                    <?php
+                        if (isset($_SESSION["admin"])) {
+                    ?>
+                        <a href="/items" class="icon" title="Gestion items"><i class="fas fa-suitcase"></i></a>
+                        <a href="/categories" class="icon" title="Gestion catégories"><i class="fas fa-tags"></i></a>
+                        <a href="/membres" class="icon" title="Gestion membres"><i class="fas fa-users-cog"></i></a>
+                        <a href="/admins" class="icon" title="Gestion administrateurs"><i class="fas fa-user-shield"></i></a>
+                        <a href="/admins/logout" class="icon" title="Quiter mode administration"><i class="fas fa-user-slash"></i></a>
+                    <?php
+                        } else {
+                    ?>
+                        <a href="/admins/login" class="icon" title="Mode administration"><i class="fas fa-user-tie"></i></a>
+                    <?php
+                        }
+                    ?>
+                <a href="/team/logout" class="icon" title="Se deconnecter"><i class="fas fa-power-off"></i></a>
             <?php
                 } else {
             ?>
-                    <a href="/team/login" class="icon" title="Se connecter"><i class="fas fa-users"></i></a>
+                <a href="/team/login" class="icon" title="Se connecter"><i class="fas fa-users"></i></a>
             <?php
                 }
             ?>
