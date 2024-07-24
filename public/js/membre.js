@@ -161,6 +161,11 @@ function addTr(id, name) {
     //Append the buttons td
     const actions = document.createElement('td');
     const div = document.createElement('div');
+    //Create the show button
+    const show = document.createElement('a');
+    show.classList.add('btn-purple');
+    show.classList.add('text-xs');
+    show.setAttribute('href', `/membres/${id}`);
     //Create the update button
     const btnUpdate = document.createElement('button');
     btnUpdate.classList.add('btn-yellow');
