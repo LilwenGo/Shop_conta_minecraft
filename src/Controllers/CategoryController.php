@@ -20,7 +20,7 @@ class CategoryController extends Controller {
             $categories = $this->manager->getFromTeam($_SESSION['team']['id']);
             Controller::render('Category/index', ['categories' => $categories]);
         } else {
-            header('Location: /categories/login');
+            header('Location: /admins/login');
         }
     }
 
