@@ -33,25 +33,27 @@
     <table class="table">
         <thead>
             <tr>
-                <th colspan="2">Membres</th>
+                <th colspan="3">Membres</th>
             </tr>
             <tr>
                 <th>#</th>
                 <th>Nom</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach($team->getMembres() as $membre) {?>
-                <tr id="mambre<?= $admin->getId();?>">
+                <tr id="membre<?= $admin->getId();?>">
                     <td><?= $membre->getId();?></td>
                     <td><?= $membre->getName();?></td>
+                    <td><a href="/membres/<?= $membre->getId();?>" class="btn-purple text-xs">Voir</a></td>
                 </tr>
             <?php }?>
         </tbody>
         <?php if(isset($_SESSION['admin'])) {?>
             <tfoot>
                 <tr>
-                    <td colspan="2">
+                    <td colspan="3">
                         <a href="/membres" class="btn-yellow text-xs">Modifier</a>
                     </td>
                 </tr>

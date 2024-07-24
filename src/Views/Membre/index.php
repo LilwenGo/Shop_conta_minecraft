@@ -17,6 +17,7 @@
                     <td id="name<?= $membre->getId();?>"><?= $membre->getName();?></td>
                     <td>
                         <div>
+                            <a href="/membres/<?= $membre->getId();?>" class="btn-purple text-xs">Voir</a>
                             <button class="btn-yellow text-xs" onclick="editMembre(<?= $membre->getId();?>)" id="editButton<?= $membre->getId();?>">Modifier</button>
                             <button class="btn-red text-xs" onclick="deleteMembre(<?= $membre->getId();?>)"><img src="/img/trash.png" alt="Icone poubelle" class="icon-img"></button>
                         </div>

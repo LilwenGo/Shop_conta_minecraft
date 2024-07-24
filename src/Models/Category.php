@@ -7,6 +7,7 @@ class Category {
     private int $id;
     private int $id_team;
     private string $libelle;
+    private string $role;
 
     //Accessors
     public function getId(): int {
@@ -31,5 +32,13 @@ class Category {
 
     public function setLibelle(string $libelle): void {
         $this->libelle = $libelle;
+    }
+    
+    public function getRole(): string {
+        return $this->role;
+    }
+
+    public function setRole(string $role): void {
+        $this->role = $role;
     }
 }

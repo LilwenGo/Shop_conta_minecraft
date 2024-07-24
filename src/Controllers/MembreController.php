@@ -1,16 +1,22 @@
 <?php
 namespace Project\Controllers;
 use Project\Models\MembreManager;
+use Project\Models\TeamManager;
 
 /**
  * Class MembreController
  */
 class MembreController extends Controller {
     /**
+     * TeamManager
+     */
+    private TeamManager $tmanager;
+    /**
      * Init the manager and the validator
      */
     public function __construct() {
         $this->manager = new MembreManager();
+        $this->tmanager = new TeamManager();
         parent::__construct();
     }
 
@@ -22,7 +28,37 @@ class MembreController extends Controller {
             $membres = $this->manager->getFromTeam($_SESSION['team']['id']);
             Controller::render('Membre/index', ['membres' => $membres]);
         } else {
-            header('Location: /membres/login');
+            header('Location: /admins/login');
+        }
+    }
+
+    /**
+     * Render the show view
+     */
+    public function show(int $id): void {
+        if(isset($_SESSION['team']['id'])) {
+            $team = $this->tmanager->find($_SESSION['team']['id']);
+            if($team) {
+                $membre = $this->manager->find($id);
+                if($membre) {
+                    $inTeam = false;
+                    foreach($team->getMembres() as $tmembre) {
+                        if($membre->getId() === $tmembre->getId()) {
+                            $inTeam = true;
+                            break;
+                        }
+                    }
+                    if($inTeam) {
+                        Controller::render('Membre/show', ['membre' => $membre, 'categories' => $team->getCategories()]);
+                    }
+                } else {
+                    Controller::render('error', ['code' => 404, 'message' => 'Impossible de trouver le membre !']);
+                }
+            } else {
+                Controller::render('error', ['code' => 404, 'message' => 'Impossible de trouver le membre !']);
+            }
+        } else {
+            header('Location: /team/login');
         }
     }
 

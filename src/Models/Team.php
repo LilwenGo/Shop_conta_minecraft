@@ -9,6 +9,7 @@ class Team {
     private string $password;
     private array $membres;
     private array $admins;
+    private array $categories;
 
     //Accessors
     public function getId(): int {
@@ -49,5 +50,13 @@ class Team {
             $this->admins = $m->getFromTeam($this->id);
         }
         return $this->admins;
+    }
+
+    public function getCategories(): array {
+        if(!isset($this->categories)) {
+            $m = new CategoryManager();
+            $this->categories = $m->getFromMembre($this->id);
+        }
+        return $this->categories;
     }
 }

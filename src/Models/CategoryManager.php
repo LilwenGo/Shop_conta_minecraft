@@ -35,6 +35,17 @@ class CategoryManager extends Manager {
     }
 
     /**
+     * Return the categories with matching id_membre
+     */
+    public function getFromMembre(int $id): array {
+        $stmt = $this->db->prepare('SELECT id, id_team, libelle, role FROM category_membre JOIN category ON category_membre.id_category = category.id WHERE id_membre = ?');
+        $stmt->execute([
+            $id
+        ]);
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, Category::class);
+    }
+
+    /**
      * Store a category in the database
      */
     public function create(int $id_team, string $libelle): int {

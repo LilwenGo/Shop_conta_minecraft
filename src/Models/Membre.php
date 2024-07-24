@@ -7,6 +7,7 @@ class Membre {
     private int $id;
     private int $id_team;
     private string $name;
+    private array $categories;
 
     //Accessors
     public function getId(): int {
@@ -31,5 +32,13 @@ class Membre {
 
     public function setName(string $name): void {
         $this->name = $name;
+    }
+
+    public function getCategories(): array {
+        if(!isset($this->categories)) {
+            $m = new CategoryManager();
+            $this->categories = $m->getFromMembre($this->id);
+        }
+        return $this->categories;
     }
 }
