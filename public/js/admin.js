@@ -149,44 +149,85 @@ function displayError(error, message) {
  * @param {string} name admin's name
  */
 function addTr(id, name) {
-    //Create the tr
-    const tr = document.createElement('tr');
-    tr.setAttribute('id', `admin${id}`);
-    //Append the id's td
-    const num = document.createElement('td');
-    num.appendChild(document.createTextNode(id));
-    tr.appendChild(num);
-    //Append the name's td
-    const username = document.createElement('td');
-    username.appendChild(document.createTextNode(name));
-    username.setAttribute('id', `name${id}`);
-    tr.appendChild(username);
-    //Append the buttons td
-    const actions = document.createElement('td');
-    const div = document.createElement('div');
-    //Create the update button
-    const btnUpdate = document.createElement('button');
-    btnUpdate.classList.add('btn-yellow');
-    btnUpdate.classList.add('text-xs');
-    btnUpdate.setAttribute('onclick', `editAdmin(${id})`);
-    btnUpdate.setAttribute('id', `editButton${id}`);
-    btnUpdate.append(document.createTextNode('Modifier'));
-    div.append(btnUpdate);
-    //Create the delete button 
-    const btnDelete = document.createElement('button');
-    btnDelete.classList.add('btn-red');
-    btnDelete.classList.add('text-xs');
-    btnDelete.setAttribute('onclick', `deleteAdmin(${id})`);
-    const img = document.createElement('img');
-    img.classList.add('icon-img');
-    img.setAttribute('src', '/img/trash.png');
-    img.setAttribute('alt', 'Icone poubelle');
-    btnDelete.append(img);
-    div.append(btnDelete);
-    actions.append(div);
-    tr.append(actions);
-    //Append the tr
-    tbody.append(tr);
+    let tr = {
+        type: 'tr',
+        attributes: {
+            id: `admin${id}`
+        },
+        childs: [
+            {
+                type: 'td',
+                childs: [
+                    {
+                        type: 'text',
+                        text: id
+                    }
+                ]
+            },
+            {
+                type: 'td',
+                attributes: {
+                    id: `name${id}`
+                },
+                childs: [
+                    {
+                        type: 'text',
+                        text: name
+                    }
+                ]
+            },
+            {
+                type: 'td',
+                childs: [
+                    {
+                        type: 'div',
+                        childs: [
+                            {
+                                type: 'button',
+                                classes: [
+                                    'btn-yellow',
+                                    'text-xs'
+                                ],
+                                attributes: {
+                                    id: `editButton${id}`,
+                                    onclick: `editAdmin(${id})`
+                                },
+                                childs: [
+                                    {
+                                        type: 'text',
+                                        text: 'Modifier'
+                                    }
+                                ]
+                            },
+                            {
+                                type: 'button',
+                                classes: [
+                                    'btn-red',
+                                    'text-xs'
+                                ],
+                                attributes: {
+                                    onclick: `deleteAdmin(${id})`
+                                },
+                                childs: [
+                                    {
+                                        type: 'img',
+                                        classes: [
+                                            'icon-img'
+                                        ],
+                                        attributes: {
+                                            src: '/img/trash.png',
+                                            alt: 'Icone poubelle'
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    };
+    addChildElement(tbody, tr);
 }
 
 /**

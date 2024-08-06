@@ -146,44 +146,85 @@ function displayError(error, message) {
  * @param {string} libelle category's libelle
  */
 function addTr(id, libelle) {
-    //Create the tr
-    const tr = document.createElement('tr');
-    tr.setAttribute('id', `category${id}`);
-    //Append the id's td
-    const num = document.createElement('td');
-    num.appendChild(document.createTextNode(id));
-    tr.appendChild(num);
-    //Append the libelle's td
-    const libelleTd = document.createElement('td');
-    libelleTd.innerHTML = libelle;
-    libelleTd.setAttribute('id', `libelle${id}`);
-    tr.appendChild(libelleTd);
-    //Append the buttons td
-    const actions = document.createElement('td');
-    const div = document.createElement('div');
-    //Create the update button
-    const btnUpdate = document.createElement('button');
-    btnUpdate.classList.add('btn-yellow');
-    btnUpdate.classList.add('text-xs');
-    btnUpdate.setAttribute('onclick', `editCategory(${id})`);
-    btnUpdate.setAttribute('id', `editButton${id}`);
-    btnUpdate.append(document.createTextNode('Modifier'));
-    div.append(btnUpdate);
-    //Create the delete button 
-    const btnDelete = document.createElement('button');
-    btnDelete.classList.add('btn-red');
-    btnDelete.classList.add('text-xs');
-    btnDelete.setAttribute('onclick', `deleteCategory(${id})`);
-    const img = document.createElement('img');
-    img.classList.add('icon-img');
-    img.setAttribute('src', '/img/trash.png');
-    img.setAttribute('alt', 'Icone poubelle');
-    btnDelete.append(img);
-    div.append(btnDelete);
-    actions.append(div);
-    tr.append(actions);
-    //Append the tr
-    tbody.append(tr);
+    let tr = {
+        type: 'tr',
+        attributes: {
+            id: `category${id}`
+        },
+        childs: [
+            {
+                type: 'td',
+                childs: [
+                    {
+                        type: 'text',
+                        text: id
+                    }
+                ]
+            },
+            {
+                type: 'td',
+                attributes: {
+                    id: `libelle${id}`
+                },
+                childs: [
+                    {
+                        type: 'text',
+                        text: libelle
+                    }
+                ]
+            },
+            {
+                type: 'td',
+                childs: [
+                    {
+                        type: 'div',
+                        childs: [
+                            {
+                                type: 'button',
+                                classes: [
+                                    'btn-yellow',
+                                    'text-xs'
+                                ],
+                                attributes: {
+                                    id: `editButton${id}`,
+                                    onclick: `editCategory(${id})`
+                                },
+                                childs: [
+                                    {
+                                        type: 'text',
+                                        text: 'Modifier'
+                                    }
+                                ]
+                            },
+                            {
+                                type: 'button',
+                                classes: [
+                                    'btn-red',
+                                    'text-xs'
+                                ],
+                                attributes: {
+                                    onclick: `deleteCategory(${id})`
+                                },
+                                childs: [
+                                    {
+                                        type: 'img',
+                                        classes: [
+                                            'icon-img'
+                                        ],
+                                        attributes: {
+                                            src: '/img/trash.png',
+                                            alt: 'Icone poubelle'
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    };
+    addChildElement(tbody, tr);
 }
 
 /**

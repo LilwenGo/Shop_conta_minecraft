@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Shop compta Minecraft</title>
     <script src="https://kit.fontawesome.com/c1d0ab37d6.js" crossorigin="anonymous"></script>
+    <script src="/js/helper.js"></script>
     <link rel="stylesheet" href="/style/style.css">
     <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
 </head>
