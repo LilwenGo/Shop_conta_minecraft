@@ -72,11 +72,11 @@ class CategoryManager extends Manager {
     /**
      * Delete a category from the database
      */
-    public function delete(int $id): int {
+    public function delete(int $id, int $id_team): int {
         $stmt = $this->db->prepare('DELETE FROM category WHERE id = ? AND id_team = ?');
         $stmt->execute([
             $id,
-            $_SESSION['team']['id']
+            $id_team
         ]);
         return $stmt->rowCount();
     }

@@ -35,6 +35,13 @@ $router->post('/membres/create/', "MembreController@store");
 $router->post('/membres/:id/update/', "MembreController@update");
 $router->get('/membres/:id/delete/', "MembreController@delete");
 
+//Items
+$router->get('/items/', "ItemController@index");
+$router->get('/items/:id/', "ItemController@show");
+$router->post('/items/create/', "ItemController@store");
+$router->post('/items/:id/update/', "ItemController@update");
+$router->get('/items/:id/delete/', "ItemController@delete");
+
 //Categories
 $router->get('/categories/', "CategoryController@index");
 $router->post('/categories/create/', "CategoryController@store");

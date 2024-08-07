@@ -30,6 +30,7 @@ class Validator {
         "alphaNumDash" => "Le champ peut contenir que des lettres minuscules, majuscules, des chiffres, des slash et des tirets !",
         "alphaSpaceAccent" => "Le champ peut contenir que des lettres minuscules, majuscules, avec accent ou des espaces !",
         "numeric" => "Le champ peut contenir que des chiffres !",
+        "decimal" => "Le champ peut contenir que des chiffres, des virgules ou des points !",
         "confirm" => "Le champs n'est pas conforme au confirm !"
     ];
     /**
@@ -49,6 +50,7 @@ class Validator {
         "alphaNumDash" => "#^[A-z0-9-\|]+$#",
         "alphaSpaceAccent" => "#^[A-z À-ú]+$#",
         "numeric" => "#^[0-9]+$#",
+        "decimal" => "#^[0-9\.\,]+$#",
         "confirm" => ""
     ];
 
