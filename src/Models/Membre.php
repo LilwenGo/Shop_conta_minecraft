@@ -8,6 +8,7 @@ class Membre {
     private int $id_team;
     private string $name;
     private array $categories;
+    private array $solds;
 
     //Accessors
     public function getId(): int {
@@ -40,5 +41,13 @@ class Membre {
             $this->categories = $m->getFromMembre($this->id);
         }
         return $this->categories;
+    }
+
+    public function getSolds(): array {
+        if(!isset($this->solds)) {
+            $m = new SoldManager();
+            $this->solds = $m->getFromMembre($this->id);
+        }
+        return $this->solds;
     }
 }

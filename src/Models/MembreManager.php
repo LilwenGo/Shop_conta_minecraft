@@ -61,11 +61,11 @@ class MembreManager extends Manager {
     /**
      * Delete a membre from the database
      */
-    public function delete(int $id): int {
+    public function delete(int $id, int $id_team): int {
         $stmt = $this->db->prepare('DELETE FROM membre WHERE id = ? AND id_team = ?');
         $stmt->execute([
             $id,
-            $_SESSION['team']['id']
+            $id_team
         ]);
         return $stmt->rowCount();
     }
