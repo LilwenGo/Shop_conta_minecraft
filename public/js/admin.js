@@ -2,7 +2,6 @@
 const form = document.querySelector('.form');
 const inputName = document.getElementById('name');
 const inputPassword = document.getElementById('password');
-const errorsSpan = document.getElementsByClassName('error');
 const tbody = document.querySelector('tbody');
 
 //Listen form's submit
@@ -114,33 +113,6 @@ function deleteAdmin(id) {
             displayErrors(jsonRes.errors);
         }
     });
-}
-
-/**
- * Display all the gived errors
- */
-function displayErrors(errors) {
-    for(let span of errorsSpan) {
-        span.innerText = '';
-    }
-    for(let error in errors) {
-        if(error === 'message') {
-            alert(errors[error]);
-        } else {
-            displayError(error, errors[error]);
-        }
-    }
-}
-
-/**
- * Display the error with gived message
- * @param {string} error field
- * @param {string} message message
- */
-function displayError(error, message) {
-    const field = document.getElementsByName(error)[0];
-    const span = field.nextSibling.nextSibling;
-    span.innerText = message;
 }
 
 /**
