@@ -26,7 +26,7 @@ class Sold {
     }
 
     public function getId_membre(): int {
-        return $this->id_item;
+        return $this->id_membre;
     }
     
     public function setId_membre(int $id_membre): void {

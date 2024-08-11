@@ -35,7 +35,7 @@
         <tfoot>
             <tr>
                 <td colspan="3">
-                    <a href="/solds" class="btn-yellow text-xs">Modifier</a>
+                    <a href="/solds/item/<?= $item->getId();?>/index" class="btn-yellow text-xs">Modifier</a>
                 </td>
             </tr>
         </tfoot>

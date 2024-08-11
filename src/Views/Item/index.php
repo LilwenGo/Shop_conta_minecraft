@@ -36,12 +36,14 @@
     <form action="" method="post" class="form" enctype="multipart/form-data">
         <label for="libelle">Nom:</label>
         <input type="text" name="libelle" id="libelle" class="input" autocomplete="off">
+        <span class="error text-xs"></span>
         <label for="category">Catégorie:</label>
         <select name="category" id="category" class="input">
             <?php foreach($categories as $category) {?>
                 <option value="<?= $category->getId();?>"><?= escape($category->getLibelle());?></option>
             <?php }?>
         </select>
+        <span class="error text-xs"></span>
         <label for="price">Prix:</label>
         <input type="number" name="price" id="price" class="input" autocomplete="off">
         <label for="total_selled">Total vendu:</label>

@@ -42,6 +42,12 @@ $router->post('/items/create/', "ItemController@store");
 $router->post('/items/:id/update/', "ItemController@update");
 $router->get('/items/:id/delete/', "ItemController@delete");
 
+//Solds
+$router->get('/solds/:filter/:id/index/', "SoldController@index");
+$router->post('/solds/create/', "SoldController@store");
+$router->post('/solds/:id/update/', "SoldController@update");
+$router->get('/solds/:id/delete/', "SoldController@delete");
+
 //Categories
 $router->get('/categories/', "CategoryController@index");
 $router->post('/categories/create/', "CategoryController@store");

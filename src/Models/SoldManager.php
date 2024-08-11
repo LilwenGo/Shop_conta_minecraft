@@ -14,7 +14,7 @@ class SoldManager extends Manager {
     /**
      * Return the sold with matching id_item
      */
-    public function find(int $id_item, int $id_membre): array {
+    public function find(int $id_item, int $id_membre): Sold|false {
         $stmt = $this->db->prepare('SELECT id_item, item.libelle AS item, id_membre, membre.name AS membre, quantity, refunded FROM item_membre JOIN item ON item.id = item_membre.id_item JOIN membre ON membre.id = item_membre.id_membre WHERE id_item = ? AND id_membre = ?');
         $stmt->execute([
             $id_item,
@@ -49,7 +49,7 @@ class SoldManager extends Manager {
     /**
      * Create a sold
      */
-    public function sell(int $id_item, int $id_membre, int $quantity, int $refunded): int {
+    public function create(int $id_item, int $id_membre, int $quantity, int $refunded): int {
         $stmt = $this->db->prepare('INSERT INTO item_membre(id_item, id_membre, quantity, refunded) VALUES (?,?,?,?)');
         $stmt->execute([
             $id_item,
