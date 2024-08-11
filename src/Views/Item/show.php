@@ -8,7 +8,8 @@
             <option value="<?= $category->getId();?>" <?php if(escape($category->getLibelle()) === escape($item->getCategory())) {echo 'selected';}?>><?= escape($category->getLibelle());?></option>
         <?php }?>
         </select>
-        <button class="btn-yellow text-xs">Changer</button>
+        <span class="error text-xs"></span>
+        <button class="btn-yellow text-xs" onclick="updateCategory(<?= $item->getId();?>)">Changer</button>
     <?php } else {?>
         <h2>Catégorie: <?= $item->getCategory();?></h2>
     <?php }?>
@@ -43,3 +44,4 @@
     <p class="text-s">Prix: <?= $item->getPrice();?></p>
     <p class="text-s">Total vendu: <?= $item->getTotal_selled();?></p>
 </section>
+<script src="/js/Item/show.js"></script>

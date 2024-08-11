@@ -60,4 +60,34 @@
             </tfoot>
         <?php }?>
     </table>
+    <table class="table">
+        <thead>
+            <tr>
+                <th colspan="3">Catégories</th>
+            </tr>
+            <tr>
+                <th>#</th>
+                <th>Libelle</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($team->getCategories() as $category) {?>
+                <tr id="category<?= $admin->getId();?>">
+                    <td><?= $category->getId();?></td>
+                    <td><?= escape($category->getLibelle());?></td>
+                    <td><a href="/categories/<?= $category->getId();?>" class="btn-purple text-xs">Voir</a></td>
+                </tr>
+            <?php }?>
+        </tbody>
+        <?php if(isset($_SESSION['admin'])) {?>
+            <tfoot>
+                <tr>
+                    <td colspan="3">
+                        <a href="/categories" class="btn-yellow text-xs">Modifier</a>
+                    </td>
+                </tr>
+            </tfoot>
+        <?php }?>
+    </table>
 </section>

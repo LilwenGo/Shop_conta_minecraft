@@ -87,12 +87,12 @@ class ItemManager extends Manager {
     }
 
     /**
-     * Only update the total_selled of the item
+     * Only update the category of the item
      */
-    public function updateTotal(int $id, int $total_selled): int {
-        $stmt = $this->db->prepare('UPDATE item SET total_selled = ? WHERE id = ?');
+    public function updateCategory(int $id, int $id_category): int {
+        $stmt = $this->db->prepare('UPDATE item SET id_category = ? WHERE id = ?');
         $stmt->execute([
-            $total_selled,
+            $id_category,
             $id
         ]);
         return $stmt->rowCount();

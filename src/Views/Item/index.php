@@ -52,4 +52,4 @@
         <input type="submit" value="Valider" class="btn-blue">
     </form>
 </section>
-<script src="/js/item.js"></script>
+<script src="/js/Item/index.js"></script>

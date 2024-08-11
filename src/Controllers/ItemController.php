@@ -106,6 +106,41 @@ class ItemController extends Controller {
     }
 
     /**
+     * Update the item's category
+     */
+    public function updateCategory(int $id): void {
+        if(isTeamAdmin()) {
+            $this->validator->validate([
+                'category' => ['required', 'numeric']
+            ]);
+
+            if(!$this->validator->errors()) {
+                $item = $this->manager->find($id);
+                if($item) {
+                    $category = $this->cManager->find($_POST['category']);
+                    if($category) {
+                        $success = $this->manager->updateCategory($id, $category->getId());
+                        if($success !== 0) {
+                            echo json_encode(['success' => true]);
+                        } else {
+                            echo json_encode(['success' => false, 'errors' => ['message' => 'Une erreur est survenue !']]);
+                        }
+                    } else {
+                        echo json_encode(['success' => false, 'errors' => ['message' => 'La catégorie n\'a pas été trouvé !']]);
+                    }
+                } else {
+                    echo json_encode(['success' => false, 'errors' => ['message' => 'L\'item n\'a pas été trouvé !']]);
+                }
+            } else {
+                echo json_encode(['success' => false, 'errors' => $_SESSION['error']]);
+                unset($_SESSION['error']);
+            }
+        } else {
+            echo json_encode(['success' => false, 'errors' => ['message' => 'Vous n\'avez pas l\'abilitation !']]);
+        }
+    }
+
+    /**
      * Delete the item with matching id
      */
     public function delete(int $id): void {
