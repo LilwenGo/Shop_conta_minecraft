@@ -10,6 +10,7 @@ class Team {
     private array $membres;
     private array $admins;
     private array $categories;
+    private array $items;
 
     //Accessors
     public function getId(): int {
@@ -55,8 +56,16 @@ class Team {
     public function getCategories(): array {
         if(!isset($this->categories)) {
             $m = new CategoryManager();
-            $this->categories = $m->getFromMembre($this->id);
+            $this->categories = $m->getFromTeam($this->id);
         }
         return $this->categories;
+    }
+
+    public function getItems(): array {
+        if(!isset($this->items)) {
+            $m = new ItemManager();
+            $this->items = $m->getFromTeam($this->id);
+        }
+        return $this->items;
     }
 }

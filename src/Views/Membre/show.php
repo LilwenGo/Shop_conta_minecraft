@@ -4,6 +4,34 @@
     <table class="table">
         <thead>
             <tr>
+                <th colspan="3">Transactions</th>
+            </tr>
+            <tr>
+                <th>Item</th>
+                <th>Quantité</th>
+                <th>Remboursé</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach($membre->getSolds() as $sold) {?>
+            <tr id="sold,<?= $sold->getId_item();?>,<?= $sold->getId_membre();?>">
+                <td><?= $sold->getItem();?></td>
+                <td><?= $sold->getQuantity();?></td>
+                <td><?= $sold->getRefunded();?></td>
+            </tr>
+        <?php }?>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3">
+                    <a href="/solds/membre/<?= $membre->getId();?>/index" class="btn-yellow text-xs">Modifier</a>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    <table class="table">
+        <thead>
+            <tr>
                 <th colspan="4">Catégories gérées</th>
             </tr>
             <tr>

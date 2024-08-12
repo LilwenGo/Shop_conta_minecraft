@@ -1,8 +1,10 @@
 <?php
 namespace Project\Controllers;
+use Project\Models\CategoryManager;
 use Project\Models\ItemManager;
 use Project\Models\MembreManager;
 use Project\Models\SoldManager;
+use Project\Models\TeamManager;
 
 /**
  * Class SoldController
@@ -17,6 +19,16 @@ class SoldController extends Controller {
      * MembreManager
      */
     private ItemManager $iManager;
+    
+    /**
+     * CategoryManager
+     */
+    private CategoryManager $cManager;
+    
+    /**
+     * TeamManager
+     */
+    private TeamManager $tManager;
 
     /**
      * Init the managers and the validator
@@ -25,6 +37,8 @@ class SoldController extends Controller {
         $this->manager = new SoldManager();
         $this->mManager = new MembreManager();
         $this->iManager = new ItemManager();
+        $this->cManager = new CategoryManager();
+        $this->tManager = new TeamManager();
         parent::__construct();
     }
 
@@ -33,14 +47,62 @@ class SoldController extends Controller {
      */
     public function index(string $filter, int $id): void {
         if(isset($_SESSION['team'])) {
-            $solds = match($filter) {
-                'item' => $this->manager->getFromItem($id),
-                'membre' => $this->manager->getFromMembre($id),
-                default => []
-            };
-            $membres = $this->mManager->getFromTeam($_SESSION['team']['id']);
-            $items = $this->iManager->getFromTeam($_SESSION['team']['id']);
-            Controller::render('Sold/index', ['solds' => $solds, 'items' => $items, 'membres' => $membres]);
+            $team = $this->tManager->find($_SESSION['team']['id']);
+            if($team) {
+                $membres = $this->mManager->getFromTeam($_SESSION['team']['id']);
+                $items = $this->iManager->getFromTeam($_SESSION['team']['id']);
+                $solds = [];
+                switch($filter) {
+                    case 'item':
+                        $item = $this->iManager->find($id);
+                        if($item) {
+                            $inTeam = false;
+                            foreach($items as $titem) {
+                                if($item->getId() === $titem->getId()) {
+                                    $inTeam = true;
+                                    break;
+                                }
+                            }
+                            if($inTeam) {
+                                $solds = $this->manager->getFromItem($id);
+                            }
+                        }
+                        break;  
+                    case 'membre':
+                        $membre = $this->mManager->find($id);
+                        if($membre) {
+                            $inTeam = false;
+                            foreach($membres as $tmembre) {
+                                if($membre->getId() === $tmembre->getId()) {
+                                    $inTeam = true;
+                                    break;
+                                }
+                            }
+                            if($inTeam) {
+                                $solds = $this->manager->getFromMembre($id);
+                            }
+                        }
+                        break;
+                    case 'category':
+                        $category = $this->cManager->find($id);
+                        if($category) {
+                            $inTeam = false;
+                            foreach($team->getCategories() as $tcategory) {
+                                if($category->getId() === $tcategory->getId()) {
+                                    $inTeam = true;
+                                    break;
+                                }
+                            }
+                            if($inTeam) {
+                                $solds = $this->manager->getFromMembre($id);
+                            }
+                        }
+                        break;
+                }
+                Controller::render('Sold/index', ['solds' => $solds, 'items' => $items, 'membres' => $membres]);
+            } else {
+                Controller::render('error', ['code' => 404, 'message' => 'Impossible de trouver la vente !']);
+            }
         } else {
             header('Location: /team/login');
         }

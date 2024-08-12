@@ -46,6 +46,17 @@ class ItemManager extends Manager {
     }
 
     /**
+     * Return the items with matching id_membre
+     */
+    public function getFromCategory(int $id): array {
+        $stmt = $this->db->prepare('SELECT item.id AS id, item.id_team AS id_team, category.libelle AS category, item.libelle AS libelle, price, total_selled FROM item JOIN category ON item.id_category = category.id WHERE item.id_category = ?');
+        $stmt->execute([
+            $id
+        ]);
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, Item::class);
+    }
+
+    /**
      * Store a item in the database
      */
     public function create(int $id_team, int $id_category, string $libelle, float $price, int $total_selled): int {

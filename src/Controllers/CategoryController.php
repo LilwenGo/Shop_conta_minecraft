@@ -1,14 +1,20 @@
 <?php
 namespace Project\Controllers;
 use Project\Models\CategoryManager;
+use Project\Models\TeamManager;
 
 /** Class CategoryController */
 class CategoryController extends Controller {
+    /**
+     * TeamManager
+     */
+    private TeamManager $tManager;
     /**
      * Init the manager and the validator
      */
     public function __construct() {
         $this->manager = new CategoryManager();
+        $this->tManager = new TeamManager();
         parent::__construct();
     }
 
@@ -21,6 +27,38 @@ class CategoryController extends Controller {
             Controller::render('Category/index', ['categories' => $categories]);
         } else {
             header('Location: /admins/login');
+        }
+    }
+    
+    /**
+     * Render the category details 
+     */
+    public function show(int $id): void {
+        if(isset($_SESSION['team'])) {
+            $team = $this->tManager->find($_SESSION['team']['id']);
+            if($team) {
+                $category = $this->manager->find($id);
+                if($category) {
+                    $inTeam = false;
+                    foreach($team->getCategories() as $tcategory) {
+                        if($category->getId() === $tcategory->getId()) {
+                            $inTeam = true;
+                            break;
+                        }
+                    }
+                    if($inTeam) {
+                        Controller::render('Category/show', ['category' => $category]);
+                    } else {
+                        Controller::render('error', ['code' => 404, 'message' => 'Impossible de trouver la catégorie !']);
+                    }
+                } else {
+                    Controller::render('error', ['code' => 404, 'message' => 'Impossible de trouver la catégorie !']);
+                }
+            } else {
+                Controller::render('error', ['code' => 404, 'message' => 'Impossible de trouver la catégorie !']);
+            }
+        } else {
+            header('Location: /team/login');
         }
     }
 

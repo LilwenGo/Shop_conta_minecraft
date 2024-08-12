@@ -17,6 +17,7 @@
                     <td id="libelle<?= $category->getId();?>"><?= escape($category->getLibelle());?></td>
                     <td>
                         <div>
+                            <a class="btn-purple text-xs" href="/categories/<?= $category->getId();?>">Voir</a>
                             <button class="btn-yellow text-xs" onclick="editCategory(<?= $category->getId();?>)" id="editButton<?= $category->getId();?>">Modifier</button>
                             <button class="btn-red text-xs" onclick="deleteCategory(<?= $category->getId();?>)"><img src="/img/trash.png" alt="Icone poubelle" class="icon-img"></button>
                         </div>

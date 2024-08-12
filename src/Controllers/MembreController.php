@@ -50,6 +50,8 @@ class MembreController extends Controller {
                     }
                     if($inTeam) {
                         Controller::render('Membre/show', ['membre' => $membre, 'categories' => $team->getCategories()]);
+                    } else {
+                        Controller::render('error', ['code' => 404, 'message' => 'Impossible de trouver le membre !']);
                     }
                 } else {
                     Controller::render('error', ['code' => 404, 'message' => 'Impossible de trouver le membre !']);

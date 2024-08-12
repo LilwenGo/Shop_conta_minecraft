@@ -1,6 +1,7 @@
 <?php
 namespace Project\Controllers;
 use Project\Models\CategoryManager;
+use Project\Models\TeamManager;
 use Project\Models\ItemManager;
 
 /**
@@ -9,12 +10,15 @@ use Project\Models\ItemManager;
 class ItemController extends Controller {
     /** CategoryManager */
     private CategoryManager $cManager;
+    /** TeamManager */
+    private TeamManager $tManager;
     /**
      * Init the manager and the validator
      */
     public function __construct() {
         $this->manager = new ItemManager();
         $this->cManager = new CategoryManager();
+        $this->tManager = new TeamManager();
         parent::__construct();
     }
 
@@ -23,7 +27,7 @@ class ItemController extends Controller {
      */
     public function index(): void {
         if(isTeamAdmin()) {
-            $categories = $this->cManager->getAll();
+            $categories = $this->cManager->getFromTeam($_SESSION['team']['id']);
             $items = $this->manager->getFromTeam($_SESSION['team']['id']);
             Controller::render('Item/index', ['items' => $items, 'categories' => $categories]);
         } else {
@@ -36,11 +40,30 @@ class ItemController extends Controller {
      */
     public function show(int $id): void {
         if(isset($_SESSION['team'])) {
-            $categories = $this->cManager->getAll();
-            $item = $this->manager->find($id);
-            Controller::render('Item/show', ['item' => $item, 'categories' => $categories]);
+            $team = $this->tManager->find($_SESSION['team']['id']);
+            if($team) {
+                $item = $this->manager->find($id);
+                if($item) {
+                    $inTeam = false;
+                    foreach($team->getItems() as $titem) {
+                        if($item->getId() === $titem->getId()) {
+                            $inTeam = true;
+                            break;
+                        }
+                    }
+                    if($inTeam) {
+                        Controller::render('Item/show', ['item' => $item, 'categories' => $team->getCategories()]);
+                    } else {
+                        Controller::render('error', ['code' => 404, 'message' => 'Impossible de trouver l\'item !']);
+                    }
+                } else {
+                    Controller::render('error', ['code' => 404, 'message' => 'Impossible de trouver l\'item !']);
+                }
+            } else {
+                Controller::render('error', ['code' => 404, 'message' => 'Impossible de trouver l\'item !']);
+            }
         } else {
-            header('Location: /admins/login');
+            header('Location: /team/login');
         }
     }
 

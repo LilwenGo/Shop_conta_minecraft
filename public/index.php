@@ -51,6 +51,7 @@ $router->get('/solds/:id/delete/', "SoldController@delete");
 
 //Categories
 $router->get('/categories/', "CategoryController@index");
+$router->get('/categories/:id/', "CategoryController@show");
 $router->post('/categories/create/', "CategoryController@store");
 $router->post('/categories/:id/update/', "CategoryController@update");
 $router->get('/categories/:id/delete/', "CategoryController@delete");
