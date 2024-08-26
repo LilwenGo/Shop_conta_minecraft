@@ -1,7 +1,9 @@
 //Get the needed elements
 const form = document.querySelector('.form');
-const inputLibelle = document.getElementById('libelle');
-const tbody = document.querySelector('tbody');
+const inputCategory = document.getElementById('category');
+const inputMembre = document.getElementById('membre');
+const inputRole = document.getElementById('role');
+const tbody = document.querySelectorAll('tbody')[1];
 
 //Listen form's submit
 form.addEventListener('submit', (e) => {
@@ -13,21 +15,21 @@ form.addEventListener('submit', (e) => {
 })
 
 /**
- * Send a request for category backend insertion and display it
+ * Send a request for membre backend insertion and display it
  */
 function createCategory() {
     //Get the data from the form
     let data = new FormData();
-    data.append("libelle", inputLibelle.value);
+    data.append("role", inputRole.value);
     //Ajax request 
-    fetch("/categories/create", {
+    fetch(`/categories/${inputCategory.value}/addMembre/${inputMembre.value}`, {
         body: data,
         method: "POST"
     }).then(async (response) => {
         let jsonRes = await response.json();
-        if(jsonRes.success && jsonRes.data.id) {
-            addTr(jsonRes.data.id, jsonRes.data.libelle);
-            inputLibelle.value = '';
+        if(jsonRes.success && jsonRes.data) {
+            addTr(inputCategory.value, inputMembre.value, jsonRes.data.libelle, inputRole.value);
+            inputRole.value = '';
         } else if(jsonRes.errors) {
             displayErrors(jsonRes.errors);
         }
@@ -35,44 +37,46 @@ function createCategory() {
 }
 
 let editId = null;
-let editLibelle = null;
+let editRole = null;
 /**
  * Change the tr for edition
  * @param {*} id 
  */
-function editCategory(id) {
-    if(editId != null && editLibelle != null) {
+function editCategory(id_category, id_membre) {
+    let id = `${id_category},${id_membre}`;
+    if(editId != null && editRole != null) {
         //Reset the unupdated tds if exists
-        let libelleTd = document.getElementById('libelle' + editId);
+        let roleTd = document.getElementById('role' + editId);
         let button = document.getElementById('editButton' + editId);
-        if(libelleTd && button) {
-            libelleTd.innerHTML = editLibelle;
+        if(roleTd && button) {
+            roleTd.innerHTML = editRole;
             button.innerText = "Modifier";
             button.setAttribute("onclick", `editCategory(${editId})`);
         }
     }
-    let newLibelleTd = document.getElementById('libelle' + id);
+    let newRoleTd = document.getElementById('role' + id);
     let newButton = document.getElementById('editButton' + id);
     editId = id;
-    editLibelle = newLibelleTd.innerHTML;
-    newLibelleTd.innerHTML = `<input type="text" class="text-xs" name="libelle${id}" id="inputLibelle${id}" value="${editLibelle}">`;
+    editRole = newRoleTd.innerHTML;
+    newRoleTd.innerHTML = `<input type="text" class="text-xs" name="role${id}" id="inputRole${id}" value="${editRole}">`;
     newButton.innerText = "Valider";
     //Change the action button
     newButton.setAttribute('onclick', `updateCategory(${id})`);
 }
 
 /**
- * Update the category
+ * Update the membre
  * @param {int} id id
  */
-async function updateCategory(id) {
-    const libelle = document.getElementById('inputLibelle' + id);
-    if(libelle) {
+async function updateCategory(id_category, id_membre) {
+    let id = `${id_category},${id_membre}`;
+    const role = document.getElementById('inputRole' + id);
+    if(role) {
         //Get the data
         let formData = new FormData();
-        formData.append("libelle", libelle.value);
+        formData.append("role", role.value);
         //Make the request
-        let res = await fetch(`/categories/${id}/update`, {
+        let res = await fetch(`/categories/${id_category}/setMembre/${id_membre}`, {
             body: formData,
             method: "POST"
         });
@@ -81,9 +85,9 @@ async function updateCategory(id) {
         //If successfull
         if(data.success) {
             //Update the tr
-            const libelleTd = document.getElementById('libelle' + id);
-            libelleTd.innerHTML = data.data.libelle;
-            editLibelle = null;
+            const roleTd = document.getElementById('role' + id);
+            roleTd.innerHTML = role.value;
+            editRole = null;
             //Reset the button
             const button = document.getElementById('editButton' + id);
             button.innerText = "Modifier";
@@ -95,17 +99,18 @@ async function updateCategory(id) {
 }
 
 /**
- * Send a request and delete the category with matching id
+ * Send a request and delete the membre with matching id
  * @param {int} id id
  */
-function deleteCategory(id) {
+function deleteCategory(id_category, id_membre) {
+    let id = `${id_category},${id_membre}`;
     //Ajax request
-    fetch(`/categories/${id}/delete`, {
+    fetch(`/categories/${id_category}/deleteMembre/${id_membre}`, {
         method: "GET"
     }).then(async (response) => {
         let jsonRes = await response.json();
         if(jsonRes.success) {
-            removeTr(id);
+            removeTr(id_category);
         } else if(jsonRes.errors) {
             displayErrors(jsonRes.errors);
         }
@@ -115,13 +120,14 @@ function deleteCategory(id) {
 /**
  * Add a tr to the table
  * @param {string} id id
- * @param {string} libelle category's libelle
+ * @param {string} role membre's role
  */
-function addTr(id, libelle) {
+function addTr(id_category, id_membre, libelle, role) {
+    let id = `${id_category},${id_membre}`;
     let tr = {
         type: 'tr',
         attributes: {
-            id: `category${id}`
+            id: `category${id_category}`
         },
         childs: [
             {
@@ -129,15 +135,12 @@ function addTr(id, libelle) {
                 childs: [
                     {
                         type: 'text',
-                        text: id
+                        text: id_category
                     }
                 ]
             },
             {
                 type: 'td',
-                attributes: {
-                    id: `libelle${id}`
-                },
                 childs: [
                     {
                         type: 'text',
@@ -147,26 +150,22 @@ function addTr(id, libelle) {
             },
             {
                 type: 'td',
+                attributes: {
+                    id: `role${id}`
+                },
+                childs: [
+                    {
+                        type: 'text',
+                        text: role
+                    }
+                ]
+            },
+            {
+                type: 'td',
                 childs: [
                     {
                         type: 'div',
                         childs: [
-                            {
-                                type: 'a',
-                                classes: [
-                                    'btn-purple',
-                                    'text-xs'
-                                ],
-                                attributes: {
-                                    href: `/categories/${id}`
-                                },
-                                childs: [
-                                    {
-                                        type: 'text',
-                                        text: 'Voir'
-                                    }
-                                ]
-                            },
                             {
                                 type: 'button',
                                 classes: [
@@ -219,9 +218,9 @@ function addTr(id, libelle) {
  * Remove a tr from the table
  * @param {int} id id
  */
-function removeTr(id) {
+function removeTr(id_category) {
     //Get the tr
-    const tr = document.getElementById(`category${id}`);
+    const tr = document.getElementById(`category${id_category}`);
     //Delete the tr
     tr.remove();
 }

@@ -54,7 +54,7 @@
         <tbody>
         <?php foreach($category->getSolds() as $sold) {?>
             <tr id="sold,<?= $sold->getId_item();?>,<?= $sold->getId_membre();?>">
-                <td><?= $sold->getItem();?></td>
+                <td><?= escape($sold->getItem());?></td>
                 <td><?= $sold->getMembre();?></td>
                 <td><?= $sold->getQuantity();?></td>
                 <td><?= $sold->getRefunded();?></td>

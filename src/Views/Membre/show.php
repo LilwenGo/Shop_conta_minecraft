@@ -15,7 +15,7 @@
         <tbody>
         <?php foreach($membre->getSolds() as $sold) {?>
             <tr id="sold,<?= $sold->getId_item();?>,<?= $sold->getId_membre();?>">
-                <td><?= $sold->getItem();?></td>
+                <td><?= escape($sold->getItem());?></td>
                 <td><?= $sold->getQuantity();?></td>
                 <td><?= $sold->getRefunded();?></td>
             </tr>
@@ -48,13 +48,13 @@
             foreach($membre->getCategories() as $category) {?>
                 <tr id="category<?= $category->getId();?>">
                     <td><?= $category->getId();?></td>
-                    <td><?= $category->getLibelle();?></td>
-                    <td><?= $category->getRole();?></td>
+                    <td><?= escape($category->getLibelle());?></td>
+                    <td id="role<?= $category->getId();?>,<?= $membre->getId();?>"><?= $category->getRole();?></td>
                     <?php if(isset($_SESSION['admin'])) {?>
                         <td>
                             <div>
-                                <button class="btn-yellow text-xs" onclick="editRole(<?= $category->getId();?>)" id="cEditButton<?= $category->getId();?>">Modifier</button>
-                                <button class="btn-red text-xs" onclick="deleteRole(<?= $category->getId();?>)"><img src="/img/trash.png" alt="Icone poubelle" class="icon-img"></button>
+                                <button class="btn-yellow text-xs" onclick="editCategory(<?= $category->getId();?>,<?= $membre->getId();?>)" id="editButton<?= $category->getId();?>,<?= $membre->getId();?>">Modifier</button>
+                                <button class="btn-red text-xs" onclick="deleteCategory(<?= $category->getId();?>,<?= $membre->getId();?>)"><img src="/img/trash.png" alt="Icone poubelle" class="icon-img"></button>
                             </div>
                         </td>
                     <?php }?>
@@ -64,10 +64,11 @@
     </table>
     <?php if(isset($_SESSION['admin'])) {?>
         <form class="form" action="" method="post" enctype="multipart/form-data">
+            <input type="hidden" id="membre" name="membre" value="<?= $membre->getId();?>">
             <label for="category" class="text-s">Catégorie:</label>
             <select name="category" id="category" class="input">
             <?php foreach($categories as $category) {?>
-                <option value="<?= $category->getId();?>"><?= $category->getLibelle();?></option>
+                <option value="<?= $category->getId();?>"><?= escape($category->getLibelle());?></option>
             <?php }?>
             </select>
             <span class="error text-xs"><?= error('category');?></span>
@@ -78,3 +79,4 @@
         </form>
     <?php }?>
 </section>
+<script src="/js/Membre/show.js"></script>

@@ -34,4 +34,4 @@
         <input type="submit" value="Valider" class="btn-blue">
     </form>
 </section>
-<script src="/js/membre.js"></script>
+<script src="/js/Membre/index.js"></script>

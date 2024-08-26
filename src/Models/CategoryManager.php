@@ -80,4 +80,42 @@ class CategoryManager extends Manager {
         ]);
         return $stmt->rowCount();
     }
+
+    /**
+     * Add a membre with a role
+     */
+    public function addMembre(int $id, int $id_membre, string $role): int {
+        $stmt = $this->db->prepare('INSERT INTO category_membre (id_category, id_membre, role) VALUES (?,?,?)');
+        $stmt->execute([
+            $id,
+            $id_membre,
+            $role
+        ]);
+        return $stmt->rowCount();
+    }
+
+    /**
+     * Update a membre with a role
+     */
+    public function setMembre(int $id, int $id_membre, string $role): int {
+        $stmt = $this->db->prepare('UPDATE category_membre SET role = ? WHERE id_category = ? AND id_membre = ?');
+        $stmt->execute([
+            $role,
+            $id,
+            $id_membre
+        ]);
+        return $stmt->rowCount();
+    }
+
+    /**
+     * Delete a membre with a role
+     */
+    public function deleteMembre(int $id, int $id_membre): int {
+        $stmt = $this->db->prepare('DELETE FROM category_membre WHERE id_category = ? AND id_membre = ?');
+        $stmt->execute([
+            $id,
+            $id_membre
+        ]);
+        return $stmt->rowCount();
+    }
 }

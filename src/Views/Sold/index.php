@@ -15,7 +15,7 @@
             <?php 
             foreach($solds as $sold) {?>
                 <tr id="sold<?= $sold->getId_item();?>,<?= $sold->getId_membre();?>">
-                    <td><?= $sold->getItem();?></td>
+                    <td><?= escape($sold->getItem());?></td>
                     <td><?= $sold->getMembre();?></td>
                     <td id="quantity<?= $sold->getId_item();?>,<?= $sold->getId_membre();?>"><?= $sold->getQuantity();?></td>
                     <td id="refunded<?= $sold->getId_item();?>,<?= $sold->getId_membre();?>"><?= $sold->getRefunded();?></td>

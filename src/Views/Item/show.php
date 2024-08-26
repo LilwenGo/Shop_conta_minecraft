@@ -11,7 +11,7 @@
         <span class="error text-xs"></span>
         <button class="btn-yellow text-xs" onclick="updateCategory(<?= $item->getId();?>)">Changer</button>
     <?php } else {?>
-        <h2>Catégorie: <?= $item->getCategory();?></h2>
+        <h2>Catégorie: <?= escape($item->getCategory());?></h2>
     <?php }?>
     <table class="table">
         <thead>

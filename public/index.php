@@ -55,5 +55,8 @@ $router->get('/categories/:id/', "CategoryController@show");
 $router->post('/categories/create/', "CategoryController@store");
 $router->post('/categories/:id/update/', "CategoryController@update");
 $router->get('/categories/:id/delete/', "CategoryController@delete");
+$router->post('/categories/:id/addMembre/:membre/', "CategoryController@addMembre");
+$router->post('/categories/:id/setMembre/:membre/', "CategoryController@setMembre");
+$router->get('/categories/:id/deleteMembre/:membre/', "CategoryController@deleteMembre");
 
 $router->run();
