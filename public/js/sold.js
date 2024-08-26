@@ -31,7 +31,7 @@ function createSold() {
         method: "POST"
     }).then(async (response) => {
         let jsonRes = await response.json();
-        if(jsonRes.success && jsonRes.data.id_item, jsonRes.data.id_membre) {
+        if(jsonRes.success && jsonRes.data) {
             addTr(jsonRes.data.id_item, jsonRes.data.id_membre, jsonRes.data.item, jsonRes.data.membre, inputQuantity.value, inputRefunded.value);
             inputQuantity.value = '';
             inputRefunded.value = '';

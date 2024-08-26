@@ -5,6 +5,7 @@ use Project\Models\ItemManager;
 use Project\Models\MembreManager;
 use Project\Models\SoldManager;
 use Project\Models\TeamManager;
+use \Exception;
 
 /**
  * Class SoldController
@@ -124,8 +125,12 @@ class SoldController extends Controller {
                 $item = $this->iManager->find($_POST['item']);
                 $membre = $this->mManager->find($_POST['membre']);
                 if($item && $membre) {
-                    $this->manager->create($item->getId(), $membre->getId(), $_POST['quantity'], $_POST['refunded']);
-                    echo json_encode(['success' => true, 'data' => ['id_item' => $item->getId(), 'id_membre' => $membre->getId(), 'item' => $item->getLibelle(), 'membre' => $membre->getName()]]);
+                    try {
+                        $this->manager->create($item->getId(), $membre->getId(), $_POST['quantity'], $_POST['refunded']);
+                        echo json_encode(['success' => true, 'data' => ['id_item' => $item->getId(), 'id_membre' => $membre->getId(), 'item' => $item->getLibelle(), 'membre' => $membre->getName()]]);
+                    } catch (Exception $e) {
+                        echo json_encode(['success' => false, 'errors' => ['message' => $e->getMessage()]]);
+                    }
                 } else {
                     echo json_encode(['success' => false, 'errors' => ['message' => 'Une erreur est survenue lors de la séléction de l\'item ou du membre!']]);
                 }

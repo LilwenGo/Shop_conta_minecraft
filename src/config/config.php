@@ -6,7 +6,7 @@ define("MODELS", '../src/Models/');
 define("VIEWS", '../src/Views/');
 
 //Database infos
-define('HOST', '127.0.0.1');
-define('DATABASE', 'shop_conta_minecraft');
-define('USER', 'root');
-define('PASSWORD', '');
+define('HOST', 'mysql-scfm.alwaysdata.net');
+define('DATABASE', 'scfm_db');
+define('USER', 'scfm_db_user');
+define('PASSWORD', 'v9nUWbuNJ*7Pxzs');
