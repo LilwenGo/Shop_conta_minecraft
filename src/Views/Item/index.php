@@ -46,6 +46,7 @@
         <span class="error text-xs"></span>
         <label for="price">Prix:</label>
         <input type="number" name="price" id="price" class="input" autocomplete="off">
+        <span class="error text-xs"></span>
         <label for="total_selled">Total vendu:</label>
         <input type="number" name="total_selled" id="total_selled" class="input" autocomplete="off">
         <span class="error text-xs"></span>

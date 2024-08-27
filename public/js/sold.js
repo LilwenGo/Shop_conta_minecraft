@@ -35,9 +35,8 @@ function createSold() {
             addTr(jsonRes.data.id_item, jsonRes.data.id_membre, jsonRes.data.item, jsonRes.data.membre, inputQuantity.value, inputRefunded.value);
             inputQuantity.value = '';
             inputRefunded.value = '';
-        } else if(jsonRes.errors) {
-            displayErrors(jsonRes.errors);
         }
+        displayErrors(jsonRes.errors);
     });
 }
 
@@ -106,9 +105,8 @@ async function updateSold(id_item, id_membre) {
             const button = document.getElementById('editButton' + id);
             button.innerText = "Modifier";
             button.setAttribute('onclick', `editSold(${id_item},${id_membre})`);
-        } else if(data.errors) {
-            displayErrors(data.errors);
         }
+        displayErrors(data.errors);
     }
 }
 
@@ -124,9 +122,8 @@ function deleteSold(id_item, id_membre) {
         let jsonRes = await response.json();
         if(jsonRes.success) {
             removeTr(id_item, id_membre);
-        } else if(jsonRes.errors) {
-            displayErrors(jsonRes.errors);
         }
+        displayErrors(jsonRes.errors);
     });
 }
 

@@ -41,6 +41,7 @@ $router->get('/items/:id/', "ItemController@show");
 $router->post('/items/create/', "ItemController@store");
 $router->post('/items/:id/update/', "ItemController@update");
 $router->post('/items/:id/updateCategory/', "ItemController@updateCategory");
+$router->post('/items/:id/updateTS/', "ItemController@updateTotal_selled");
 $router->get('/items/:id/delete/', "ItemController@delete");
 
 //Solds

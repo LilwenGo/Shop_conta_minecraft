@@ -65,6 +65,7 @@
     <?php if(isset($_SESSION['admin'])) {?>
         <form class="form" action="" method="post" enctype="multipart/form-data">
             <input type="hidden" id="membre" name="membre" value="<?= $membre->getId();?>">
+            <span class="error text-xs"></span>
             <label for="category" class="text-s">Catégorie:</label>
             <select name="category" id="category" class="input">
             <?php foreach($categories as $category) {?>

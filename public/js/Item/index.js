@@ -36,9 +36,8 @@ function createItem() {
             inputLibelle.value = '';
             inputPrice.value = '';
             inputTotal_selled.value = '';
-        } else if(jsonRes.errors) {
-            displayErrors(jsonRes.errors);
         }
+        displayErrors(jsonRes.errors);
     });
 }
 
@@ -118,9 +117,8 @@ async function updateItem(id) {
             const button = document.getElementById('editButton' + id);
             button.innerText = "Modifier";
             button.setAttribute('onclick', `editItem(${id})`);
-        } else if(data.errors) {
-            displayErrors(data.errors);
         }
+        displayErrors(data.errors);
     }
 }
 
@@ -136,9 +134,8 @@ function deleteItem(id) {
         let jsonRes = await response.json();
         if(jsonRes.success) {
             removeTr(id);
-        } else if(jsonRes.errors) {
-            displayErrors(jsonRes.errors);
         }
+        displayErrors(jsonRes.errors);
     });
 }
 

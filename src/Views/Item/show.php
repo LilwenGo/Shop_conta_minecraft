@@ -42,6 +42,9 @@
         </tfoot>
     </table>
     <p class="text-s">Prix: <?= $item->getPrice();?></p>
-    <p class="text-s">Total vendu: <?= $item->getTotal_selled();?></p>
+    <label for="total_selled" class="text-s">Total vendu:</label>
+    <input class="input" type="number" name="total_selled" id="total_selled" value="<?= $item->getTotal_selled();?>">
+    <span class="error text-xs"></span>
+    <button class="btn-yellow text-xs" onclick="updateTotal_selled(<?= $item->getId();?>)">Changer</button>
 </section>
 <script src="/js/Item/show.js"></script>

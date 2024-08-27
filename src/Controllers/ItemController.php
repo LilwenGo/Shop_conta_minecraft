@@ -164,6 +164,36 @@ class ItemController extends Controller {
     }
 
     /**
+     * Update the item's category
+     */
+    public function updateTotal_selled(int $id): void {
+        if(isset($_SESSION['team']['id'])) {
+            $this->validator->validate([
+                'total_selled' => ['required', 'numeric']
+            ]);
+
+            if(!$this->validator->errors()) {
+                $item = $this->manager->find($id);
+                if($item) {
+                    $success = $this->manager->updateTotal_selled($id, $_POST['total_selled']);
+                    if($success !== 0) {
+                        echo json_encode(['success' => true]);
+                    } else {
+                        echo json_encode(['success' => false, 'errors' => ['message' => 'Une erreur est survenue !']]);
+                    }
+                } else {
+                    echo json_encode(['success' => false, 'errors' => ['message' => 'L\'item n\'a pas été trouvé !']]);
+                }
+            } else {
+                echo json_encode(['success' => false, 'errors' => $_SESSION['error']]);
+                unset($_SESSION['error']);
+            }
+        } else {
+            header('Location: /team/login');
+        }
+    }
+
+    /**
      * Delete the item with matching id
      */
     public function delete(int $id): void {

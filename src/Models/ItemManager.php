@@ -108,4 +108,16 @@ class ItemManager extends Manager {
         ]);
         return $stmt->rowCount();
     }
+
+    /**
+     * Only update the total_selled of the item
+     */
+    public function updateTotal_selled(int $id, int $total_selled): int {
+        $stmt = $this->db->prepare('UPDATE item SET total_selled = ? WHERE id = ?');
+        $stmt->execute([
+            $total_selled,
+            $id
+        ]);
+        return $stmt->rowCount();
+    }
 }

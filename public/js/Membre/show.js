@@ -92,9 +92,8 @@ async function updateCategory(id_category, id_membre) {
             const button = document.getElementById('editButton' + id);
             button.innerText = "Modifier";
             button.setAttribute('onclick', `editCategory(${id})`);
-        } else if(data.errors) {
-            displayErrors(data.errors);
         }
+        displayErrors(data.errors);
     }
 }
 
@@ -111,9 +110,8 @@ function deleteCategory(id_category, id_membre) {
         let jsonRes = await response.json();
         if(jsonRes.success) {
             removeTr(id_category);
-        } else if(jsonRes.errors) {
-            displayErrors(jsonRes.errors);
         }
+        displayErrors(jsonRes.errors);
     });
 }
 

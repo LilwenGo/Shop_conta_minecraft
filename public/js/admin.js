@@ -31,9 +31,8 @@ function createAdmin() {
             addTr(jsonRes.data.id, inputName.value);
             inputName.value = '';
             inputPassword.value = '';
-        } else if(jsonRes.errors) {
-            displayErrors(jsonRes.errors);
         }
+        displayErrors(jsonRes.errors);
     });
 }
 
@@ -91,9 +90,8 @@ async function updateAdmin(id) {
             const button = document.getElementById('editButton' + id);
             button.innerText = "Modifier";
             button.setAttribute('onclick', `editAdmin(${id})`);
-        } else if(data.errors) {
-            displayErrors(data.errors);
         }
+        displayErrors(data.errors);
     }
 }
 
@@ -109,9 +107,8 @@ function deleteAdmin(id) {
         let jsonRes = await response.json();
         if(jsonRes.success) {
             removeTr(id);
-        } else if(jsonRes.errors) {
-            displayErrors(jsonRes.errors);
         }
+        displayErrors(jsonRes.errors);
     });
 }
 

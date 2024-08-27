@@ -28,9 +28,8 @@ function createMembre() {
         if(jsonRes.success && jsonRes.data.id) {
             addTr(jsonRes.data.id, inputName.value);
             inputName.value = '';
-        } else if(jsonRes.errors) {
-            displayErrors(jsonRes.errors);
         }
+        displayErrors(jsonRes.errors);
     });
 }
 
@@ -88,9 +87,8 @@ async function updateMembre(id) {
             const button = document.getElementById('editButton' + id);
             button.innerText = "Modifier";
             button.setAttribute('onclick', `editMembre(${id})`);
-        } else if(data.errors) {
-            displayErrors(data.errors);
         }
+        displayErrors(data.errors);
     }
 }
 
@@ -106,9 +104,8 @@ function deleteMembre(id) {
         let jsonRes = await response.json();
         if(jsonRes.success) {
             removeTr(id);
-        } else if(jsonRes.errors) {
-            displayErrors(jsonRes.errors);
         }
+        displayErrors(jsonRes.errors);
     });
 }
 
