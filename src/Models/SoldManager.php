@@ -27,6 +27,17 @@ class SoldManager extends Manager {
     /**
      * Return the sold with matching id_item
      */
+    public function getFromTeam(int $id): array {
+        $stmt = $this->db->prepare('SELECT id_item, item.libelle AS item, id_membre, membre.name AS membre, quantity, refunded FROM item_membre JOIN item ON item.id = item_membre.id_item JOIN membre ON membre.id = item_membre.id_membre JOIN team ON item.id_team = team.id WHERE item.id_team = ?');
+        $stmt->execute([
+            $id
+        ]);
+        return $stmt->fetchAll(\PDO::FETCH_CLASS, Sold::class);
+    }
+
+    /**
+     * Return the sold with matching id_item
+     */
     public function getFromItem(int $id): array {
         $stmt = $this->db->prepare('SELECT id_item, item.libelle AS item, id_membre, membre.name AS membre, quantity, refunded FROM item_membre JOIN item ON item.id = item_membre.id_item JOIN membre ON membre.id = item_membre.id_membre WHERE id_item = ?');
         $stmt->execute([

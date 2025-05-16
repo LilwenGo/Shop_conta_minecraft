@@ -1,0 +1,11 @@
+.vscode/
+.github/
+vendor/
+DB/
+.git/
+.env
+.env-sample
+.gitignore
+Dockerfile
+docker-compose.yml
+REAMDE.md

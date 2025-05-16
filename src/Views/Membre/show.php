@@ -24,7 +24,7 @@
         <tfoot>
             <tr>
                 <td colspan="3">
-                    <a href="/solds/membre/<?= $membre->getId();?>/index" class="btn-yellow text-xs">Modifier</a>
+                    <a href="/solds" class="btn-yellow text-xs">Modifier</a>
                 </td>
             </tr>
         </tfoot>
@@ -80,4 +80,6 @@
         </form>
     <?php }?>
 </section>
-<script src="/js/Membre/show.js"></script>
+<?php if(isset($_SESSION['admin'])) {?>
+    <script src="/js/Membre/show.js"></script>
+<?php }?>

@@ -86,45 +86,23 @@ or
 $ php -S localhost:8000 -t public
 ```
 
-## Stape 3 - The router
+## Launch project with Docker
 
-To create a route, you have to type this code into the file index.php in the public directory:
-```php
-$router = new Project\Router($_SERVER["REQUEST_URI"]);
+If you want to deploy the app with Docker, you must follow some steps.
 
-//This line for a GET route
-$router->get('route', 'Controller@method');
+First of all create a `.env` file based on the `.env-sample` and modify the vairables values.
 
-//This line for a POST route
-$router->post('route', 'Controller@method');
- ```
+After that, you can run the following command:
+```bash
+docker compose up
+```
 
-There are some examples of routes (not in this project):
+And then, you can initialise the database structure with the following command:
+```bash
+docker-compose exec db mysql -uuser -p database-name < DB/shop_conta_minecraft.sql
+```
+> ![IMPORTANT]
+> You must replace `-uuser` by the name of your database user (-ujames, -ujack)
+> `database-name` is the name of your database in the `.env` file
 
-- "/dashboard/:todoid/task/taskid, GET
-- "/dashboard/task/nouveau, GET
-- "/dashboard/task/nouveau, POST
-- "/dashboard/:todoid/task/:taskid, POST
-- "/dashboard/:todoid/task/:taskid/delete GET
-
-The :properties are the route's queries you cannot send the queries by ?param=something&...
-
-## Stape 4 - Models
-
-Models regroup all the methods interacting with the database
-- Managers: methods that direct interact, requests sql
-- Models: represents a table line
-
-In this project managers must be named like SomethingManager and extends Manager, the models don't have a specific name 
-
-## Stape 5 - Controllers
-
-Controllers regroup all the methods that don't interact with the database
-
-In this project controllers must be named like SomethingController, extends Controller, and have a constructor that instantiate the manager and call the parent's contructor
-
-## Stape 6 - Views
-
-Views are files that are used for the frontend dev, they contain html/js/php
-
-Views are called by the controllers with the method Controller::render('viewPath', data) (the data is optional it serves to send the variables values to the view)
+Once this is done, you can see your app on `http://localhost:8080` 

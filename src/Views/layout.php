@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Vous possédez un shop sur Minecraft et vous avez besoin de faire de la comptabilité ? Voila la solution !">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Shop compta Minecraft</title>
     <script src="https://kit.fontawesome.com/c1d0ab37d6.js" crossorigin="anonymous"></script>
@@ -21,10 +22,10 @@
                     <?php
                         if (isset($_SESSION["admin"])) {
                     ?>
-                        <a href="/items" class="icon" title="Gestion items"><i class="fas fa-suitcase"></i></a>
-                        <a href="/categories" class="icon" title="Gestion catégories"><i class="fas fa-tags"></i></a>
-                        <a href="/membres" class="icon" title="Gestion membres"><i class="fas fa-users-cog"></i></a>
-                        <a href="/admins" class="icon" title="Gestion administrateurs"><i class="fas fa-user-shield"></i></a>
+                        <a href="/items" class="icon mobile-hide" title="Gestion items"><i class="fas fa-suitcase"></i></a>
+                        <a href="/categories" class="icon mobile-hide" title="Gestion catégories"><i class="fas fa-tags"></i></a>
+                        <a href="/membres" class="icon mobile-hide" title="Gestion membres"><i class="fas fa-users-cog"></i></a>
+                        <a href="/admins" class="icon mobile-hide" title="Gestion administrateurs"><i class="fas fa-user-shield"></i></a>
                         <a href="/admins/logout" class="icon" title="Quiter mode administration"><i class="fas fa-user-slash"></i></a>
                     <?php
                         } else {

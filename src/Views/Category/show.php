@@ -64,7 +64,7 @@
         <tfoot>
             <tr>
                 <td colspan="4">
-                    <a href="/solds/category/<?= $category->getId();?>/index" class="btn-yellow text-xs">Modifier</a>
+                    <a href="/solds" class="btn-yellow text-xs">Modifier</a>
                 </td>
             </tr>
         </tfoot>

@@ -1,7 +1,10 @@
 <?php
+use Dotenv\Dotenv;
 
 session_start();
 
+$dotenv = Dotenv::createImmutable(__DIR__.'/../');
+$dotenv->load();
 require '../src/config/config.php';
 require '../vendor/autoload.php';
 require SRC . 'helper.php';
@@ -45,7 +48,7 @@ $router->post('/items/:id/updateTS/', "ItemController@updateTotal_selled");
 $router->get('/items/:id/delete/', "ItemController@delete");
 
 //Solds
-$router->get('/solds/:filter/:id/index/', "SoldController@index");
+$router->get('/solds/', "SoldController@index");
 $router->post('/solds/create/', "SoldController@store");
 $router->post('/solds/:id/update/', "SoldController@update");
 $router->get('/solds/:id/delete/', "SoldController@delete");
