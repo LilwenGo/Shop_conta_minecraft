@@ -1,0 +1,32 @@
+# Ignorer les fichiers sensibles ou locaux
+.env
+.env.local
+.env.*.local
+
+# Ignorer les dossiers inutiles pour le build
+.git
+.gitignore
+.vscode/
+node_modules/
+tests/
+var/
+vendor/
+config/jwt/
+
+# Docker + CI
+.dockerignore
+docker-compose.yml
+Dockerfile
+Dockerfile.*
+docker/
+
+# Cache, logs, temp
+*.log
+*.cache
+*.lock
+phpunit.xml
+.phpunit.result.cache
+
+# Systèmes
+Thumbs.db
+.DS_Store
