@@ -1,0 +1,34 @@
+services:
+  php:
+    build:
+      context: ./back-end
+    container_name: scfm_php
+    working_dir: /var/www/html
+    volumes:
+      - ./back-end:/var/www/html
+    depends_on:
+      - db
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: scfm_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./back-end/public:/var/www/html/public
+      - ./front-end/build:/var/www/react
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/certs:/etc/nginx/ssl:ro
+    depends_on:
+      - php
+
+  db:
+    image: mysql:8.0.36
+    container_name: mysql
+    env_file: ".env"
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
