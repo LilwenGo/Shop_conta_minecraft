@@ -4,8 +4,8 @@ services:
       context: ./back-end
     container_name: scfm_php
     working_dir: /var/www/html
-    volumes:
-      - ./back-end:/var/www/html
+    #volumes:
+      #- ./back-end:/var/www/html
     depends_on:
       - db
 
@@ -16,8 +16,8 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./back-end/public:/var/www/html/public
-      - ./front-end/build:/var/www/react
+      #- ./back-end/public:/var/www/html/public
+      - ./front-end/dist:/var/www/react
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
       - ./nginx/certs:/etc/nginx/ssl:ro
     depends_on:
