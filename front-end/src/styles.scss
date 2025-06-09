@@ -217,6 +217,17 @@ main {
   }
 }
 
+.bubble {
+  @include flex-x(center);
+  width: fit-content;
+  height: fit-content;
+  padding: 8px;
+  border-radius: 12px;
+  font-family: sans-serif;
+  font-size: $font-paragraph;
+  background-color: $yellow;
+}
+
 .nav-link {
   width: 100%;
   height: fit-content;
@@ -245,6 +256,8 @@ main {
   }
   &-menu {
     @include flex-y();
+    z-index: 3;
+    box-shadow: $black -4px 0 20px 0;
     position: absolute;
     background-color: $yellow;
     top: 0;

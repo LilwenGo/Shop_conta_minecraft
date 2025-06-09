@@ -1,12 +1,49 @@
-import { Link } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router';
+import { useAuth } from '@/context/AuthContext';
+import Button from './Button';
+import Burger from './Burger';
+import NavLink from './NavLink';
 
 export default function Header() {
+  const { hasRole, logout } = useAuth();
+
+  let authButtons;
+  if(hasRole("Membre")) {
+    authButtons = (
+      <>
+        <Button onClick={logout}>Se déconnecter</Button>
+        <Button variant="accent">Profil</Button>
+      </>
+    );
+  } else {
+    authButtons = (
+      <>
+        <Button to="/login">Se connecter</Button>
+        <Button to="/register" variant="accent">S'inscrire</Button>
+      </>
+    );
+  }
+
   return (
-    <header className="p-2 flex gap-2 bg-white text-black justify-between">
-      <nav className="flex flex-row">
-        <div className="px-2 font-bold">
-          <Link to="/">Home</Link>
+    <header className="banner">
+      <Link to="/" aria-label="Retour à l'accueil">
+        <img className="logo" src="/images/logo.png" alt="Logo du site" />
+      </Link>
+      <h1 className="title">Shop Compta For Minecraft</h1>
+      <Burger footElements={authButtons} className="show-if-mobile">
+        <div className="burger-section">
+          <NavLink to="/">Accueil</NavLink>
+          {hasRole("Membre") && (
+            <>
+              <NavLink to="/team">Équipe</NavLink>
+              <NavLink to="/items">Items</NavLink>
+              <NavLink to="/transactions">Transactions</NavLink>
+            </>
+          )}
         </div>
+      </Burger>
+      <nav id="authentication" aria-label="Authentification" className="show-if-desktop">
+        {authButtons}
       </nav>
     </header>
   )
