@@ -1,6 +1,7 @@
 import { createContext, useContext, useState } from 'react';
 
 type User = {
+  id: string,
   name: string
   roles: string[]
 }

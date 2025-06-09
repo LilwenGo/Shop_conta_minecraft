@@ -1,5 +1,7 @@
 import Card from '@/components/Card';
 import Form from '@/components/Form';
+import { useAuth } from '@/context/AuthContext';
+import { api } from '@/helper';
 import { createLazyFileRoute, Link } from '@tanstack/react-router';
 
 export const Route = createLazyFileRoute('/register')({
@@ -7,6 +9,7 @@ export const Route = createLazyFileRoute('/register')({
 });
 
 function RouteComponent() {
+  const {login} = useAuth();
   return (
     <Card>
         <Form
@@ -56,7 +59,23 @@ function RouteComponent() {
                     ]
                 }
             ]}
-            action="/api/register"
+            callBack={(formState: any) => {
+                const data = {
+                    team: formState.team.value,
+                    username: formState.username.value,
+                    password: formState.password.value
+                };
+                api.post("/api/register", data).then((res: any) => {
+                    if(res.error) {
+                        let message = `Une erreur ${res.code} s'est produite: ${res.error}`;
+                        console.error(message);
+                        alert(message);
+                        return;
+                    } else {
+                        login(res.user);
+                    }
+                });
+            }}
         />
         <Link to="/login" className="link small">J'ai déjà un compte</Link>
     </Card>

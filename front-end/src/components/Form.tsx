@@ -18,10 +18,10 @@ type FormParams = {
     description?: string | React.ReactNode,
     inputs: InputDefinition[],
     className?: string,
-    action: string 
+    callBack: CallableFunction
 };
 
-export default function Form({title, description, inputs, className, action}: FormParams) {
+export default function Form({title, description, inputs, className, callBack}: FormParams) {
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         const hasErrors = Object.values(formState).some(
@@ -29,6 +29,8 @@ export default function Form({title, description, inputs, className, action}: Fo
         );
         if(hasErrors) {
             return;
+        } else {
+            return callBack(formState);
         }
     }
 
@@ -39,11 +41,11 @@ export default function Form({title, description, inputs, className, action}: Fo
         }
         return initial;
     });
+
     const hasErrors = Object.values(formState).some(
         (field: any) => field.errors.length > 0 || field.value.trim() === ""
     );
     
-    action;
     return (
         <form action="" className={`form ${className}`} onSubmit={handleSubmit} encType="multipart/form-data">
             <h2 className="subtitle">{title}</h2>
