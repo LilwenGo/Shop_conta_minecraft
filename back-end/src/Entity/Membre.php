@@ -32,7 +32,7 @@ class Membre implements UserInterface, PasswordAuthenticatedUserInterface, Persi
     #[ORM\OneToOne(Team::class, 'owner', cascade: ['persist', 'remove'])]
     private ?Team $ownedTeam = null;
 
-    #[ORM\ManyToOne(Team::class, inversedBy: 'membres')]
+    #[ORM\ManyToOne(Team::class, inversedBy: 'membres', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn('team', 'id')]
     private ?Team $team;
 

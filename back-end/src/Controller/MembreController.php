@@ -5,7 +5,6 @@ use App\Entity\Membre;
 use App\Entity\Team;
 use App\Service\MembreService;
 use App\Service\RoleService;
-use App\Service\TeamService;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -16,17 +15,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
 #[Route("/api")]
 class MembreController extends AbstractController {
-    #[Route('/login', 'login', methods: 'POST')]
-    public function login(JWTTokenManagerInterface $jwtManager): JsonResponse {
-        $user = $this->getUser();
-        $token = $jwtManager->create($user);
-        $response = new JsonResponse(['success' => true]);
-        $response->headers->setCookie(
-            Cookie::create('BEARER')->withValue($token)->withHttpOnly(true)->withSecure(true)->withSameSite('Strict')->withPath('/api')
-        );
-        return $response;
-    }
-
     #[Route('/register', 'register', methods: 'POST')]
     public function register(
         Request $request,
@@ -60,7 +48,8 @@ class MembreController extends AbstractController {
         } catch(\Exception $e) {
             return new JsonResponse([
                 'success' => false,
-                'error' => 'Registration failed'
+                'error' => 'Registration failed',
+                'message' => $e->getMessage()
             ], 500);
         }
         $token = $jwtManager->create($user);
@@ -70,7 +59,7 @@ class MembreController extends AbstractController {
         return $response;
     }
 
-    #[Route('/logout', 'logout', methods: 'POST')]
+    #[Route('/logout', 'logout', methods: 'GET')]
     public function logout(): JsonResponse {
         // On crée un cookie vide avec expiration immédiate pour le supprimer côté client
         $cookie = Cookie::create('BEARER')

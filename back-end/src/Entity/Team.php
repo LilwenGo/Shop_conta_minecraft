@@ -19,14 +19,14 @@ class Team implements PersistableEntity {
     #[ORM\Column("name", Types::STRING, 50)]
     private ?string $name = null;
 
-    #[ORM\OneToOne(Membre::class, inversedBy: 'ownedTeam')]
+    #[ORM\OneToOne(Membre::class, inversedBy: 'ownedTeam', cascade: ['persist'])]
     #[ORM\JoinColumn('owner', 'id', nullable: false)]
     private Membre $owner;
 
-    #[ORM\OneToMany(Membre::class, 'team', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(Membre::class, 'team', cascade: ['remove'])]
     private Collection $membres;
     
-    #[ORM\OneToMany(Item::class, 'team', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(Item::class, 'team', cascade: ['remove'])]
     private Collection $items;
 
     public function __construct() {

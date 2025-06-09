@@ -10,10 +10,8 @@ COPY . /var/www/html
 
 # Installer Composer (si ce n’est pas déjà fait)
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-
-# Définir l’entrée
-COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+RUN composer install
 
 WORKDIR /var/www/html
+
+CMD ["php-fpm"]
