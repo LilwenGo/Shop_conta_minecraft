@@ -1,11 +1,12 @@
 import { useNavigate } from '@tanstack/react-router';
 import { motion } from 'motion/react';
 
-export default function Button({to, onClick, variant = "primary", className = "", children}: {to?: string | undefined, onClick?: any, variant?: string, className?: string, children: string}) {
+export default function Button({to, onClick, variant = "primary", className = "", children}: {to?: string | undefined, onClick?: any, variant?: string, className?: string, children: React.ReactNode | string}) {
     const navigate = useNavigate();
     const variants = new Set([
         "primary",
-        "accent"
+        "accent",
+        "danger"
     ]);
 
     function handleNavigate() {

@@ -7,6 +7,11 @@ export type InputDefinition = {
     name: string,
     label: string,
     type: string,
+    hidden?: boolean,
+    options?: Array<{
+        name: string,
+        value?: string
+    }>,
     rules: Array<{
         regex: RegExp,
         message: string
@@ -16,12 +21,13 @@ export type InputDefinition = {
 type FormParams = {
     title: string,
     description?: string | React.ReactNode,
-    inputs: InputDefinition[],
+    inputs: Array<InputDefinition | false>,
     className?: string,
-    callBack: CallableFunction
+    callBack: CallableFunction,
+    children?: React.ReactNode
 };
 
-export default function Form({title, description, inputs, className, callBack}: FormParams) {
+export default function Form({title, description, inputs, className, callBack, children}: FormParams) {
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         const hasErrors = Object.values(formState).some(
@@ -37,7 +43,7 @@ export default function Form({title, description, inputs, className, callBack}: 
     const [formState, setFormState] = useState(() => {
         const initial: Record<string, { value: string; errors: string[] }> = {};
         for (const input of inputs) {
-            initial[input.name] = { value: "", errors: [] };
+            if(input) initial[input.name] = { value: "", errors: [] };
         }
         return initial;
     });
@@ -45,12 +51,17 @@ export default function Form({title, description, inputs, className, callBack}: 
     const hasErrors = Object.values(formState).some(
         (field: any) => field.errors.length > 0 || field.value.trim() === ""
     );
+
+    const hasVisibleFields = Object.values(inputs).some(
+        (field: any) => !field.hidden
+    );
     
     return (
         <form action="" className={`form ${className}`} onSubmit={handleSubmit} encType="multipart/form-data">
             <h2 className="subtitle">{title}</h2>
-            <p className="paragraph">{description}</p>
-            {inputs.map((i: InputDefinition, index: number) => {
+            {description && <p className="paragraph">{description}</p>}
+            {inputs.map((i: InputDefinition | false, index: number) => {
+                if(!i) return <></>;
                 return (
                     <Input 
                         key={`input-${index}`} 
@@ -58,19 +69,26 @@ export default function Form({title, description, inputs, className, callBack}: 
                         name={i.name} 
                         label={i.label} 
                         rules={i.rules}
+                        hidden={i.hidden ?? false}
+                        options={i.options ?? undefined}
                         formState={formState}
                         setFormState={setFormState}
                     />
                 );
             })}
-            <motion.input 
-                whileHover={{scale: 1.05, transition: {duration: 0.15}}}
-                whileTap={{scale: 0.95, transition: {duration: 0.05}}}
-                type="submit" 
-                className="btn btn-primary" 
-                value="Valider" 
-                disabled={hasErrors}
-            />
+            <div className="bubble-group">
+                {children}
+                {
+                    hasVisibleFields && <motion.input 
+                        whileHover={{scale: 1.05, transition: {duration: 0.15}}}
+                        whileTap={{scale: 0.95, transition: {duration: 0.05}}}
+                        type="submit" 
+                        className="btn btn-primary" 
+                        value="Valider" 
+                        disabled={hasErrors}
+                    />
+                }
+            </div>
         </form>
     );
 }

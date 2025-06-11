@@ -11,7 +11,7 @@ export default function Header() {
   if(hasRole("Membre")) {
     authButtons = (
       <>
-        <Button onClick={logout}>Se déconnecter</Button>
+        <Button to="/" onClick={logout}>Se déconnecter</Button>
         <Button variant="accent">Profil</Button>
       </>
     );
