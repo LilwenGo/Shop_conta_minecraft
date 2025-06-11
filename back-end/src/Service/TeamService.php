@@ -10,7 +10,7 @@ class TeamService extends AbstractService {
         parent::__construct($em, Team::class);
     }
 
-    public function getById(int $id): ?Team {
+    public function getById(string $id): ?Team {
         return $this->repository->findById($id);
     }
 

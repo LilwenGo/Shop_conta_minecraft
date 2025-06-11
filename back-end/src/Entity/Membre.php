@@ -29,11 +29,11 @@ class Membre implements UserInterface, PasswordAuthenticatedUserInterface, Persi
     #[ORM\ManyToMany(Role::class, "membres")]
     private Collection $roles;
 
-    #[ORM\OneToOne(Team::class, 'owner', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(Team::class, 'owner', cascade: ['persist'])]
     private ?Team $ownedTeam = null;
 
-    #[ORM\ManyToOne(Team::class, inversedBy: 'membres', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn('team', 'id')]
+    #[ORM\ManyToOne(Team::class, inversedBy: 'membres')]
+    #[ORM\JoinColumn('team', 'id', onDelete: 'CASCADE')]
     private ?Team $team;
 
     #[ORM\OneToMany(Item::class, 'manager', ['persist', 'remove'])]
@@ -46,6 +46,14 @@ class Membre implements UserInterface, PasswordAuthenticatedUserInterface, Persi
         $this->roles = new ArrayCollection();
         $this->items = new ArrayCollection();
         $this->transactions = new ArrayCollection();
+    }
+
+    public function toJson(): array {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'roles' => $this->getRoleLibelles(),
+        ];
     }
 
     /**

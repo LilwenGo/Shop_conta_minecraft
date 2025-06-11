@@ -10,7 +10,7 @@ class TeamRepository extends ServiceEntityRepository {
         parent::__construct($registry, Team::class);
     }
 
-    public function findById(int $id): ?Team {
+    public function findById(string $id): ?Team {
         return $this->createQueryBuilder('t')
             ->andWhere('i.id = :id')
             ->setParameter('id', $id)

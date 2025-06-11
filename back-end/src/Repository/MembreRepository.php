@@ -10,7 +10,7 @@ class MembreRepository extends ServiceEntityRepository {
         parent::__construct($registry, Membre::class);
     }
     
-    public function findById(int $id): ?Membre {
+    public function findById(string $id): ?Membre {
         return $this->createQueryBuilder('m')
             ->addSelect('r')
             ->leftJoin('m.roles', 'r')

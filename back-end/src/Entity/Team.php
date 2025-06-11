@@ -20,10 +20,10 @@ class Team implements PersistableEntity {
     private ?string $name = null;
 
     #[ORM\OneToOne(Membre::class, inversedBy: 'ownedTeam', cascade: ['persist'])]
-    #[ORM\JoinColumn('owner', 'id', nullable: false)]
+    #[ORM\JoinColumn('owner', 'id', nullable: false, onDelete: 'CASCADE')]
     private Membre $owner;
 
-    #[ORM\OneToMany(Membre::class, 'team', cascade: ['remove'])]
+    #[ORM\OneToMany(Membre::class, 'team', cascade: ['remove'], orphanRemoval: true)]
     private Collection $membres;
     
     #[ORM\OneToMany(Item::class, 'team', cascade: ['remove'])]
@@ -32,6 +32,19 @@ class Team implements PersistableEntity {
     public function __construct() {
         $this->membres = new ArrayCollection();
         $this->items = new ArrayCollection();
+    }
+
+    public function toJson(): array {
+        $membres = [];
+        foreach($this->membres->toArray() as $membre) {
+            array_push($membres, $membre->toJson());
+        }
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'owner' => $this->owner->getUserIdentifier(),
+            'membres' => $membres
+        ];
     }
 
     /**

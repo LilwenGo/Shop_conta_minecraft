@@ -23,8 +23,13 @@ class Transaction implements PersistableEntity {
     #[ORM\Column('refunded_sum', Types::INTEGER)]
     private ?int $refundedSum = null;
 
-    public function getId(): void {
-        return;
+    public function toJson(): array {
+        return [
+            'membre' => $this->membre->getUserIdentifier(),
+            'item' => $this->item->toJson(),
+            'sum' => $this->sum,
+            'refundedSum' => $this->refundedSum
+        ];
     }
 
     /**

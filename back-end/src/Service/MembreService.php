@@ -10,7 +10,7 @@ class MembreService extends AbstractService {
         parent::__construct($em, Membre::class);
     }
 
-    public function getById(int $id): ?Membre {
+    public function getById(string $id): ?Membre {
         return $this->repository->findById($id);
     }
 

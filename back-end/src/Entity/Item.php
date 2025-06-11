@@ -35,6 +35,15 @@ class Item implements PersistableEntity {
         $this->transactions = new ArrayCollection();
     }
 
+    public function toJson(): array {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'price' => $this->price,
+            'manager' => $this->manager->getUserIdentifier()
+        ];
+    }
+
     /**
      * Get the value of id
      */ 

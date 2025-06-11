@@ -20,4 +20,10 @@ class RoleController extends AbstractController {
         }
         return new JsonResponse($roles, 200);
     }
+    
+    /* #[Route('/{libelle}', 'roles', methods: 'GET')]
+    public function getByLibelle(RoleService $service, Request $request, string $libelle): JsonResponse {
+        $role = $service->getByLibelle($libelle);
+        return new JsonResponse($role->toJson(), 200);
+    } */
 }

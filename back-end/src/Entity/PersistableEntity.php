@@ -2,5 +2,5 @@
 namespace App\Entity;
 
 interface PersistableEntity {
-    public function getId();
+    public function toJson(): array;
 }

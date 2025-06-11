@@ -9,8 +9,6 @@ abstract class AbstractService {
 
     protected $repository;
 
-    protected string $entityNamespace;
-
     public function __construct(EntityManagerInterface $em, string $entityClass) {
         $this->em = $em;
         $this->repository = $this->em->getRepository($entityClass);

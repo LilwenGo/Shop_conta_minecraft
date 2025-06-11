@@ -30,6 +30,13 @@ class Role implements PersistableEntity {
         $this->membres = new ArrayCollection();
     }
 
+    public function toJson(): array {
+        return [
+            'id' => $this->id,
+            'name' => $this->libelle
+        ];
+    }
+
     /**
      * Get the value of id
      */ 
@@ -106,6 +113,14 @@ class Role implements PersistableEntity {
     public function setMembres(Collection $membres): self
     {
         $this->membres = $membres;
+
+        return $this;
+    }
+
+    public function addMembre(Membre $membre): self {
+        if(!$this->membres->contains($membre)) {
+            $this->membres->add($membre);
+        }
 
         return $this;
     }
