@@ -12,11 +12,11 @@ function Home() {
       <h2 className="subtitle">Bienvenue !</h2>
       <p className="paragraph">
         Nous sommes ravis de te voir ! Peux-tu me <br />
-        dire de quelle équipe tu est membre ? Sauf <br />
-        si tu est là pour en créer une ?
+        dire de quelle équipe tu es membre ? Sauf <br />
+        si tu es là pour en créer une ?
       </p>
       <Button to="/login">Je me connecte</Button>
-      <Button to="/regster" variant="accent">Je crée une équipe</Button>
+      <Button to="/register" variant="accent">Je crée une équipe</Button>
       <Link to="/about" className="link small">Comment ça marche ?</Link>
     </Card>
   );

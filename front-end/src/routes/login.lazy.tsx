@@ -2,14 +2,16 @@ import Card from '@/components/Card';
 import Form from '@/components/Form';
 import { useAuth } from '@/context/AuthContext';
 import { api } from '@/helper';
-import { createLazyFileRoute, Link } from '@tanstack/react-router';
+import { createLazyFileRoute, Link, useNavigate } from '@tanstack/react-router';
 
 export const Route = createLazyFileRoute('/login')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const {login} = useAuth();
+  const navigate = useNavigate();
+  const {login, hasRole} = useAuth();
+  if(hasRole("Membre")) navigate({to: "/team"});
   return (
     <Card>
         <Form
@@ -32,7 +34,7 @@ function RouteComponent() {
                     rules: [
                         {
                             regex: /^.+$/,
-                            message: "Ce champs est requis !"
+                            message: "Ce champ est requis !"
                         }
                     ]
                 },
@@ -43,7 +45,7 @@ function RouteComponent() {
                     rules: [
                         {
                             regex: /^.+$/,
-                            message: "Ce champs est requis !"
+                            message: "Ce champ est requis !"
                         }
                     ]
                 }
