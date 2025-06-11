@@ -8,9 +8,10 @@ async function get(url: string) {
                 error: res.data.error
             };
         }
-        return res;
+        return res.data;
     }).catch(error => {
         if (error.response) {
+            if(error.response.status == 401) alert("Désolé, nous n'avons pas réussi à vous authentifier, veuillez vous reconnecter");
             return {
                 code: error.response.status,
                 error: error.response.data?.error || 'Erreur inconnue',
@@ -32,7 +33,7 @@ async function post(url: string, data: object) {
                 error: res.data.error
             };
         }
-        return res;
+        return res.data;
     }).catch(error => {
         if (error.response) {
             return {
@@ -56,8 +57,10 @@ async function put(url: string, data: object) {
                 error: res.data.error
             };
         }
-        return res;
+        return res.data;
     }).catch(error => {
+        console.log(error);
+        
         if (error.response) {
             return {
                 code: error.response.status,
@@ -80,7 +83,7 @@ async function patch(url: string, data: object) {
                 error: res.data.error
             };
         }
-        return res;
+        return res.data;
     }).catch(error => {
         if (error.response) {
             return {
@@ -104,7 +107,7 @@ async function del(url: string) {
                 error: res.data.error
             };
         }
-        return res;
+        return res.data;
     }).catch(error => {
         if (error.response) {
             return {

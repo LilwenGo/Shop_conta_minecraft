@@ -11,6 +11,7 @@ type AuthContextType = {
   login: (user: User) => void
   logout: () => void
   hasRole: (role: string) => boolean
+  isModerator: () => boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -35,8 +36,12 @@ export function AuthProvider({ children }: { children: React.ReactNode}) {
     return user?.roles.includes(role) ?? false
   }
 
+  const isModerator = () => {
+    return (user?.roles.includes('Moderateur') || user?.roles.includes('Responsable')) ?? false;
+  }
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, hasRole }}>
+    <AuthContext.Provider value={{ user, login, logout, hasRole, isModerator }}>
       {children}
     </AuthContext.Provider>
   )
