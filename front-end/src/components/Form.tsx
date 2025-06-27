@@ -1,13 +1,14 @@
 import type React from "react";
 import { motion } from "motion/react";
 import Input from "./Input";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export type InputDefinition = {
     name: string,
     label: string,
     type: string,
     hidden?: boolean,
+    initialValue?: string,
     options?: Array<{
         name: string,
         value?: string
@@ -30,29 +31,51 @@ type FormParams = {
 export default function Form({title, description, inputs, className, callBack, children}: FormParams) {
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        const hasErrors = Object.values(formState).some(
-            (field: any) => field.errors.length > 0 || field.value.trim() === ""
+        const hasErrors = Object.entries(formState).some(
+            (field: any) => {
+                const name = field[0];
+                const value = field[1];
+                const input = filteredInputs.find((i) => i.name === name)?.rules ?? [];
+                return value.errors.length > 0 || (input.length > 0 && value.value.trim() === "");
+            }
         );
         if(hasErrors) {
             return;
         } else {
-            return callBack(formState);
+            return callBack(formState, setFormState);
         }
     }
 
+    const filteredInputs = useMemo(() => inputs.filter(Boolean) as InputDefinition[], [inputs]);
+
     const [formState, setFormState] = useState(() => {
         const initial: Record<string, { value: string; errors: string[] }> = {};
-        for (const input of inputs) {
-            if(input) initial[input.name] = { value: "", errors: [] };
+        for (const input of filteredInputs) {
+            if(input) initial[input.name] = { value: input.initialValue ?? '', errors: [] };
         }
         return initial;
     });
 
-    const hasErrors = Object.values(formState).some(
-        (field: any) => field.errors.length > 0 || field.value.trim() === ""
+    useEffect(() => {
+        const initial: Record<string, { value: string; errors: string[] }> = {};
+        for (const input of filteredInputs) {
+            if (input) {
+                initial[input.name] = { value: input.initialValue ?? '', errors: [] };
+            }
+        }
+        setFormState(initial);
+    }, [filteredInputs]);
+
+    const hasErrors = Object.entries(formState).some(
+        (field: any) => {
+            const name = field[0];
+            const value = field[1];
+            const input = filteredInputs.find((i) => i.name === name)?.rules ?? [];
+            return value.errors.length > 0 || (input.length > 0 && value.value.trim() === "");
+        }
     );
 
-    const hasVisibleFields = Object.values(inputs).some(
+    const hasVisibleFields = Object.values(filteredInputs).some(
         (field: any) => !field.hidden
     );
     
@@ -60,7 +83,7 @@ export default function Form({title, description, inputs, className, callBack, c
         <form action="" className={`form ${className}`} onSubmit={handleSubmit} encType="multipart/form-data">
             <h2 className="subtitle">{title}</h2>
             {description && <p className="paragraph">{description}</p>}
-            {inputs.map((i: InputDefinition | false, index: number) => {
+            {filteredInputs.map((i: InputDefinition | false, index: number) => {
                 if(!i) return <></>;
                 return (
                     <Input 

@@ -22,6 +22,8 @@ export default function Input({type, name, label, hidden, rules, options, formSt
         errors: string[]
     };
 
+    if(!data) return <></>;
+
     return (
         <motion.div
             className={`input ${errors.length > 0 ? "error": ''}  ${hidden ? 'hide': ''}`}
@@ -30,6 +32,7 @@ export default function Input({type, name, label, hidden, rules, options, formSt
             <label htmlFor={`${name}-input`}>{label}</label>
             {type === 'select' ? 
                 <select onChange={(e) => handleChange(name, e.target.value)} hidden={hidden} id={`${name}-input`} name={name} value={data.value}>
+                    <option value="">Choisissez une option</option>
                     {options?.map((o) => {
                         return (<option value={o.value ?? o.name}>{o.name}</option>);
                     })}

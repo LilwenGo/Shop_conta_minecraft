@@ -52,6 +52,11 @@ body {
 dialog {
   background-color: transparent;
   border: none;
+  border-radius: 12px;
+  overflow-x: visible;
+  overflow-y: visible;
+  width: fit-content;
+  height: fit-content;
   &[open] {
     position: fixed;
     top: 50%;
@@ -62,8 +67,21 @@ dialog {
   &::backdrop {
     background-color: rgba(0, 0, 0, 0.4);
   }
-  .card {
+  > div.card {
     max-width: 100%;
+    position: relative;
+    overflow-x: visible;
+    overflow-y: visible;
+    .close-dialog-btn {
+      padding: 2px;
+      position: absolute;
+      top: -1rem;
+      right: -1rem;
+      .icon {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+    }
   }
 }
 
@@ -102,6 +120,13 @@ dialog {
   font-family: sans-serif;
   font-size: $font-small;
   font-weight: 400;
+  text-align: center;
+}
+
+.strong {
+  font-family: pixelify-sans, sans-serif;
+  font-size: $font-paragraph;
+  font-weight: bold;
   text-align: center;
 }
 
@@ -308,8 +333,15 @@ main {
     @include flex-y();
     width: 100%;
   }
+  &-head {
+    @include flex-y();
+    padding: 0;
+    width: 100%;
+    gap: 12px;
+  }
   &-foot {
     @include flex-y();
+    padding: 0 12px;
     width: 100%;
     gap: 12px;
   }
