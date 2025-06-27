@@ -140,9 +140,6 @@ class Membre implements UserInterface, PasswordAuthenticatedUserInterface, Persi
         foreach($this->roles as $role) {
             array_push($roles, $role->getLibelle());
         }
-        if(!in_array('Membre', $roles)) {
-            array_push($roles, 'Membre');
-        }
         return $roles;
     }
 
@@ -200,7 +197,7 @@ class Membre implements UserInterface, PasswordAuthenticatedUserInterface, Persi
      *
      * @return  self
      */ 
-    public function setTeam(Team $team): self
+    public function setTeam(?Team $team): self
     {
         $this->team = $team;
 

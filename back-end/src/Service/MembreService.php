@@ -10,6 +10,10 @@ class MembreService extends AbstractService {
         parent::__construct($em, Membre::class);
     }
 
+    public function getOrphans(): array {
+        return $this->repository->findOrphans();
+    }
+
     public function getById(string $id): ?Membre {
         return $this->repository->findById($id);
     }

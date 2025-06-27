@@ -4,6 +4,7 @@ namespace App\Security;
 
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\Authenticator\JWTAuthenticator;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
@@ -50,7 +51,18 @@ class JwtCookieAuthenticator extends AbstractAuthenticator
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): JsonResponse
     {
-        return new JsonResponse(['error' => 'Authentication failed'], 401);
+        $token = $request->cookies->get('BEARER');
+        $response = new JsonResponse(['error' => 'Authentication failed: '. $exception], 401);
+        if($token) {
+            $response->headers->setCookie(Cookie::create('BEARER')
+            ->withValue('')
+            ->withExpires(0)
+            ->withHttpOnly(true)
+            ->withSecure(true)
+            ->withSameSite('Strict')
+            ->withPath('/api'));
+        }
+        return $response;
     }
 
     public function onAuthenticationSuccess(Request $request, $token, string $firewallName): ?JsonResponse

@@ -9,6 +9,15 @@ class MembreRepository extends ServiceEntityRepository {
     public function __construct(ManagerRegistry $registry) {
         parent::__construct($registry, Membre::class);
     }
+
+    public function findOrphans(): array {
+        return $this->createQueryBuilder('m')
+            ->addSelect('r')
+            ->leftJoin('m.roles', 'r')
+            ->andWhere('m.team IS NULL')
+            ->getQuery()
+            ->getResult();
+    }
     
     public function findById(string $id): ?Membre {
         return $this->createQueryBuilder('m')
