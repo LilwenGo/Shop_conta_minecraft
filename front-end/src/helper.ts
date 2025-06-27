@@ -1,127 +1,51 @@
-import axios from "axios";
+import axios, { type AxiosResponse } from "axios";
 
-async function get(url: string) {
-    return await axios.get(url).then(res => {
-        if (!res.data.success) {
-            return {
-                code: res.status,
-                error: res.data.error
-            };
-        }
-        return res.data;
-    }).catch(error => {
-        if (error.response) {
-            if(error.response.status == 401) alert("Désolé, nous n'avons pas réussi à vous authentifier, veuillez vous reconnecter");
-            return {
-                code: error.response.status,
-                error: error.response.data?.error || 'Erreur inconnue',
-                raw: error.response.data
-            };
-        }
+function onResponseSucess(res: any) {
+    if (!res.data.success) {
         return {
-            code: 0,
-            error: error.message || 'Erreur réseau inconnue'
+            code: res.status,
+            error: res.data.error
         };
-    });
+    }
+    return res.data;
 }
 
-async function post(url: string, data: object) {
-    return await axios.post(url, data).then(res => {
-        if (!res.data.success) {
-            return {
-                code: res.status,
-                error: res.data.error
-            };
-        }
-        return res.data;
-    }).catch(error => {
-        if (error.response) {
-            return {
-                code: error.response.status,
-                error: error.response.data?.error || 'Erreur inconnue',
-                raw: error.response.data
-            };
-        }
+function onResponseFailure(error: any) {
+    if (error.response) {
         return {
-            code: 0,
-            error: error.message || 'Erreur réseau inconnue'
+            code: error.response.status,
+            error: error.response.data?.error || 'Erreur inconnue',
+            raw: error.response.data
         };
-    });
+    }
+    return {
+        code: 0,
+        error: error.message || 'Erreur réseau inconnue'
+    };
 }
 
-async function put(url: string, data: object) {
-    return await axios.put(url, data).then(res => {
-        if (!res.data.success) {
-            return {
-                code: res.status,
-                error: res.data.error
-            };
-        }
-        return res.data;
-    }).catch(error => {
-        console.log(error);
-        
-        if (error.response) {
-            return {
-                code: error.response.status,
-                error: error.response.data?.error || 'Erreur inconnue',
-                raw: error.response.data
-            };
-        }
-        return {
-            code: 0,
-            error: error.message || 'Erreur réseau inconnue'
-        };
-    });
+type SuccessHandler = (value: AxiosResponse<any, any>) => AxiosResponse<any, any> | PromiseLike<AxiosResponse<any, any>>;
+
+type FailureHandler = (reason: any) => PromiseLike<never>;
+
+async function get(url: string, successHandler?: SuccessHandler, failureHandler?: FailureHandler) {
+    return await axios.get(url).then(successHandler ?? onResponseSucess).catch(failureHandler ?? onResponseFailure);
 }
 
-async function patch(url: string, data: object) {
-    return await axios.patch(url, data).then(res => {
-        if (!res.data.success) {
-            return {
-                code: res.status,
-                error: res.data.error
-            };
-        }
-        return res.data;
-    }).catch(error => {
-        if (error.response) {
-            return {
-                code: error.response.status,
-                error: error.response.data?.error || 'Erreur inconnue',
-                raw: error.response.data
-            };
-        }
-        return {
-            code: 0,
-            error: error.message || 'Erreur réseau inconnue'
-        };
-    });
+async function post(url: string, data: object, successHandler?: SuccessHandler, failureHandler?: FailureHandler) {
+    return await axios.post(url, data).then(successHandler ?? onResponseSucess).catch(failureHandler ?? onResponseFailure);
 }
 
-async function del(url: string) {
-    return await axios.delete(url).then(res => {
-        if (!res.data.success) {
-            return {
-                code: res.status,
-                error: res.data.error
-            };
-        }
-        return res.data;
-    }).catch(error => {
-        if (error.response) {
-            return {
-                code: error.response.status,
-                error: error.response.data?.error || 'Erreur inconnue',
-                raw: error.response.data
-            };
-        }
+async function put(url: string, data: object, successHandler?: SuccessHandler, failureHandler?: FailureHandler) {
+    return await axios.put(url, data).then(successHandler ?? onResponseSucess).catch(failureHandler ?? onResponseFailure);
+}
 
-        return {
-            code: 0,
-            error: error.message || 'Erreur réseau inconnue'
-        };
-    });
+async function patch(url: string, data: object, successHandler?: SuccessHandler, failureHandler?: FailureHandler) {
+    return await axios.patch(url, data).then(successHandler ?? onResponseSucess).catch(failureHandler ?? onResponseFailure);
+}
+
+async function del(url: string, successHandler?: SuccessHandler, failureHandler?: FailureHandler) {
+    return await axios.delete(url).then(successHandler ?? onResponseSucess).catch(failureHandler ?? onResponseFailure);
 }
 
 export const api = {
