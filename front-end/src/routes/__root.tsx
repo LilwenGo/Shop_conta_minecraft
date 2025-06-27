@@ -5,7 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 
 export const Route = createRootRoute({
   component: () => {
-    const { hasRole } = useAuth();
+    const { isLogued, hasRole } = useAuth();
 
     return (
       <>
@@ -13,9 +13,11 @@ export const Route = createRootRoute({
         <main>
           <nav id="navigation" aria-label="Menu de navigation" className="show-if-desktop">
             <NavLink to="/">Accueil</NavLink>
+            {isLogued() && (
+              <NavLink to="/team">Équipe</NavLink>
+            )}
             {hasRole("Membre") && (
               <>
-                <NavLink to="/team">Équipe</NavLink>
                 <NavLink to="/items">Items</NavLink>
                 <NavLink to="/transactions">Transactions</NavLink>
               </>
@@ -26,6 +28,6 @@ export const Route = createRootRoute({
           </section>
         </main>
       </>
-    )
+    );
 },
-})
+});

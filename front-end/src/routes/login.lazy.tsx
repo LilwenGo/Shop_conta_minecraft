@@ -1,7 +1,6 @@
 import Card from '@/components/Card';
-import Form from '@/components/Form';
+import LoginForm from '@/components/forms/LoginForm';
 import { useAuth } from '@/context/AuthContext';
-import { api } from '@/helper';
 import { createLazyFileRoute, Link, useNavigate } from '@tanstack/react-router';
 
 export const Route = createLazyFileRoute('/login')({
@@ -10,63 +9,11 @@ export const Route = createLazyFileRoute('/login')({
 
 function RouteComponent() {
   const navigate = useNavigate();
-  const {login, hasRole} = useAuth();
+  const {hasRole} = useAuth();
   if(hasRole("Membre")) navigate({to: "/team"});
   return (
     <Card>
-        <Form
-            title="Se connecter"
-            description={
-                (
-                    <>
-                        Génial ! Tu as déja un compte. Ça me<br />
-                        fera moins de paperasse. Dans ce cas<br />
-                        j'ai besoin de ton pseudo et de ton<br />
-                        mot de passe.
-                    </>
-                )
-            }
-            inputs={[
-                {
-                    name: "username",
-                    label: "Nom d'utilisateur*",
-                    type: "text",
-                    rules: [
-                        {
-                            regex: /^.+$/,
-                            message: "Ce champ est requis !"
-                        }
-                    ]
-                },
-                {
-                    name: "password",
-                    label: "Mot de passe*",
-                    type: "password",
-                    rules: [
-                        {
-                            regex: /^.+$/,
-                            message: "Ce champ est requis !"
-                        }
-                    ]
-                }
-            ]}
-            callBack={(formState: any) => {
-                const data = {
-                    name: formState.username.value,
-                    password: formState.password.value
-                };
-                api.post("/api/login", data).then((res: any) => {
-                    if(res.error) {
-                        let message = `Une erreur ${res.code} s'est produite: ${res.error}`;
-                        console.error(message);
-                        alert(message);
-                        return;
-                    } else {
-                        login(res.user);
-                    }
-                });
-            }}
-        />
+        <LoginForm/>
         <Link to="/register" className="link small">Je n'ai pas de compte</Link>
     </Card>
   );

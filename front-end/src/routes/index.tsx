@@ -13,10 +13,10 @@ function Home() {
       <p className="paragraph">
         Nous sommes ravis de te voir ! Peux-tu me <br />
         dire de quelle équipe tu es membre ? Sauf <br />
-        si tu es là pour en créer une ?
+        si tu n'as pas encore de compte ?
       </p>
       <Button to="/login">Je me connecte</Button>
-      <Button to="/register" variant="accent">Je crée une équipe</Button>
+      <Button to="/register" variant="accent">Je crée un compte</Button>
       <Link to="/about" className="link small">Comment ça marche ?</Link>
     </Card>
   );

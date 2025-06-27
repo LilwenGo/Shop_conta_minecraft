@@ -1,8 +1,9 @@
 import Bubble from '@/components/Bubble';
 import Button from '@/components/Button';
 import Card from '@/components/Card';
-import AddMembreDialog from '@/components/dialogs/AddMembreDialog';
-import EditMembreDialog from '@/components/dialogs/EditMembreDialog';
+import Dialog from '@/components/Dialog';
+import MembreCrudForm from '@/components/forms/MembreCrudForm';
+import TeamForm from '@/components/forms/TeamForm';
 import { useAuth } from '@/context/AuthContext';
 import { api } from '@/helper';
 import { useQuery } from '@tanstack/react-query';
@@ -15,14 +16,15 @@ export const Route = createLazyFileRoute('/team')({
 
 function RouteComponent() {
   const navigate = useNavigate();
-  const {hasRole, isModerator} = useAuth();
-  if(!hasRole('Membre')) navigate({to: "/"});
+  const {isLogued, isModerator, getUserId} = useAuth();
+  if(!isLogued()) navigate({to: "/login"});
   const { data, isLoading, error } = useQuery({
     queryKey: ['team'], 
     queryFn: () => {
       return api.get('/api/teams/my_team');
     }
   });
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const team = data?.team;
   const [membres, setMembres] = useState(team?.membres);
   useEffect(() => {
@@ -30,19 +32,30 @@ function RouteComponent() {
       setMembres(team.membres);
     }
   }, [team]);
-  const [editingItem, setEditingItem] = useState<{id: string, name: string, roles: string[]}>();
-  const addDialogRef = useRef<HTMLDialogElement>(null);
-  const editDialogRef = useRef<HTMLDialogElement>(null);
+  const [currentMembre, setCurrentMembre] = useState<{id: string, name: string, roles: string[]} | null>(null);
   if(isLoading) return (<Card><h2 className="subtitle">Chargement...</h2></Card>);
   if(error) return (<Card><h2 className="subtitle error">Une erreur est survenue</h2></Card>);
-
-  const openEditDialog = (membre: {id: string, name: string, roles: string[]}) => {
-    setEditingItem(membre);
-    editDialogRef.current?.showModal();
+  if(!team) {
+    return (
+      <>
+        <Card>
+          <h2 className="subtitle">Aucune équipe</h2>
+          <p className="paragraph">
+            Salut ! Tu n'as pas encore d'équipe à ce que je vois.<br/>
+            Tu veux en créer une ?
+          </p>
+          <Button onClick={() => {dialogRef.current?.showModal()}}>Créer une équipe</Button>
+        </Card>
+        <Dialog dialogRef={dialogRef}>
+          <TeamForm dialogRef={dialogRef} />
+        </Dialog>
+      </>
+    );
   }
-
-  const openAddDialog = () => {
-    addDialogRef.current?.showModal();
+  const openDialog = (membre: {id: string, name: string, roles: string[]} | null) => {
+    if(membre && membre.id === getUserId()) navigate({to: '/profile'});
+    setCurrentMembre(membre);
+    dialogRef.current?.showModal();
   }
   return (
     <>
@@ -56,26 +69,22 @@ function RouteComponent() {
           {
             membres?.map((m: {id: string, name: string, roles: string[]}) => {
               let roleToDisplay = m.roles.includes('Responsable') ? 'Responsable' : m.roles.includes('Moderateur') ? 'Moderateur' : 'Membre';
-              return <Bubble onClick={() => {openEditDialog(m)}} key={`membre-${m.id}`}>{`${roleToDisplay} ${m.name}`}</Bubble>;
+              return <Bubble onClick={() => {openDialog(m)}} key={`membre-${m.id}`}>{`${roleToDisplay} ${m.name}`}</Bubble>;
             })
           }
-          {isModerator() && <Button onClick={() => {openAddDialog()}} variant="accent"><img className='icon' src="/images/plus.svg" alt="Ajouter un membre" /></Button>}
+          {isModerator() && <Button onClick={() => {openDialog(null)}} variant="accent"><img className='icon' src="/images/plus.svg" alt="Ajouter un membre" /></Button>}
         </div>
       </Card>
       {
-        isModerator() && <>
-        <AddMembreDialog 
-          dialogRef={addDialogRef} 
+        isModerator() && <Dialog dialogRef={dialogRef}>
+        <MembreCrudForm 
+          dialogRef={dialogRef} 
           membres={membres} 
           setMembres={setMembres} 
+          currentMembre={currentMembre}
+          setCurrentMembre={setCurrentMembre}
         />
-        <EditMembreDialog 
-          dialogRef={editDialogRef} 
-          membres={membres} 
-          setMembres={setMembres} 
-          editingItem={editingItem} 
-        />
-        </>
+        </Dialog>
       }
     </>
   );
