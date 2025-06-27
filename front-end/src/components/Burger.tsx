@@ -20,12 +20,14 @@ export default function Burger({className = "", footElements, children}: {classN
                         className="burger-menu"
                         aria-expanded="true"
                     >
-                        {children}
-                        <div className="burger-foot">
-                            {footElements}
+                        <div className="burger-head">
                             <button onClick={() => setIsOpen(prev => !prev)} className="burger-btn">
                                 <img src="/images/xmark.svg" alt="Fermer menu"/>
                             </button>
+                            {children}
+                        </div>
+                        <div className="burger-foot">
+                            {footElements}
                         </div>
                     </motion.div>
                 )}

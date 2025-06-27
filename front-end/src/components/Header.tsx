@@ -5,14 +5,14 @@ import Burger from './Burger';
 import NavLink from './NavLink';
 
 export default function Header() {
-  const { hasRole, logout } = useAuth();
+  const { isLogued, hasRole } = useAuth();
 
   let authButtons;
-  if(hasRole("Membre")) {
+  if(isLogued()) {
     authButtons = (
       <>
-        <Button to="/" onClick={logout}>Se déconnecter</Button>
-        <Button variant="accent">Profil</Button>
+        <Button to="/logout">Se déconnecter</Button>
+        <Button to="/profile" variant="accent">Profil</Button>
       </>
     );
   } else {
@@ -33,9 +33,11 @@ export default function Header() {
       <Burger footElements={authButtons} className="show-if-mobile">
         <div className="burger-section">
           <NavLink to="/">Accueil</NavLink>
+          {isLogued() && (
+            <NavLink to="/team">Équipe</NavLink>
+          )}
           {hasRole("Membre") && (
             <>
-              <NavLink to="/team">Équipe</NavLink>
               <NavLink to="/items">Items</NavLink>
               <NavLink to="/transactions">Transactions</NavLink>
             </>
