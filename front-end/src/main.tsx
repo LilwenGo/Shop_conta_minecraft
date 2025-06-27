@@ -1,14 +1,16 @@
-import { StrictMode } from 'react'
-import ReactDOM from 'react-dom/client'
-import { RouterProvider, createRouter } from '@tanstack/react-router'
+import { StrictMode } from 'react';
+import ReactDOM from 'react-dom/client';
+import { RouterProvider, createRouter } from '@tanstack/react-router';
 
 // Import the generated route tree
-import { routeTree } from './routeTree.gen'
+import { routeTree } from './routeTree.gen';
 
 import './styles.scss'
-import reportWebVitals from './reportWebVitals.ts'
-import { AuthProvider } from './context/AuthContext.tsx'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import reportWebVitals from './reportWebVitals.ts';
+import { AuthProvider } from './context/AuthContext.tsx';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import Card from './components/Card.tsx';
+import HttpError from './components/HttpError.tsx';
 
 const queryClient = new QueryClient();
 
@@ -20,17 +22,22 @@ const router = createRouter({
   scrollRestoration: true,
   defaultStructuralSharing: true,
   defaultPreloadStaleTime: 0,
-})
+  defaultNotFoundComponent: function () {
+    return <Card>
+      <HttpError code="404">Désolé, je n'ai pas trouvé la page dont tu parles.</HttpError>
+    </Card>;
+  }
+});
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router
   }
-}
+};
 
 // Render the app
-const rootElement = document.getElementById('app')
+const rootElement = document.getElementById('app');
 if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
   root.render(
@@ -41,10 +48,10 @@ if (rootElement && !rootElement.innerHTML) {
         </AuthProvider>
       </QueryClientProvider>
     </StrictMode>,
-  )
-}
+  );
+};
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals()
+reportWebVitals();
