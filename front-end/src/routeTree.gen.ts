@@ -17,6 +17,7 @@ import { Route as IndexImport } from './routes/index'
 
 // Create Virtual Routes
 
+const TransactionsLazyImport = createFileRoute('/transactions')()
 const TeamLazyImport = createFileRoute('/team')()
 const RegisterLazyImport = createFileRoute('/register')()
 const ProfileLazyImport = createFileRoute('/profile')()
@@ -27,6 +28,12 @@ const FormTestLazyImport = createFileRoute('/form-test')()
 const AboutLazyImport = createFileRoute('/about')()
 
 // Create/Update Routes
+
+const TransactionsLazyRoute = TransactionsLazyImport.update({
+  id: '/transactions',
+  path: '/transactions',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/transactions.lazy').then((d) => d.Route))
 
 const TeamLazyRoute = TeamLazyImport.update({
   id: '/team',
@@ -149,6 +156,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TeamLazyImport
       parentRoute: typeof rootRoute
     }
+    '/transactions': {
+      id: '/transactions'
+      path: '/transactions'
+      fullPath: '/transactions'
+      preLoaderRoute: typeof TransactionsLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -164,6 +178,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileLazyRoute
   '/register': typeof RegisterLazyRoute
   '/team': typeof TeamLazyRoute
+  '/transactions': typeof TransactionsLazyRoute
 }
 
 export interface FileRoutesByTo {
@@ -176,6 +191,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileLazyRoute
   '/register': typeof RegisterLazyRoute
   '/team': typeof TeamLazyRoute
+  '/transactions': typeof TransactionsLazyRoute
 }
 
 export interface FileRoutesById {
@@ -189,6 +205,7 @@ export interface FileRoutesById {
   '/profile': typeof ProfileLazyRoute
   '/register': typeof RegisterLazyRoute
   '/team': typeof TeamLazyRoute
+  '/transactions': typeof TransactionsLazyRoute
 }
 
 export interface FileRouteTypes {
@@ -203,6 +220,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/register'
     | '/team'
+    | '/transactions'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -214,6 +232,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/register'
     | '/team'
+    | '/transactions'
   id:
     | '__root__'
     | '/'
@@ -225,6 +244,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/register'
     | '/team'
+    | '/transactions'
   fileRoutesById: FileRoutesById
 }
 
@@ -238,6 +258,7 @@ export interface RootRouteChildren {
   ProfileLazyRoute: typeof ProfileLazyRoute
   RegisterLazyRoute: typeof RegisterLazyRoute
   TeamLazyRoute: typeof TeamLazyRoute
+  TransactionsLazyRoute: typeof TransactionsLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -250,6 +271,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileLazyRoute: ProfileLazyRoute,
   RegisterLazyRoute: RegisterLazyRoute,
   TeamLazyRoute: TeamLazyRoute,
+  TransactionsLazyRoute: TransactionsLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -270,7 +292,8 @@ export const routeTree = rootRoute
         "/logout",
         "/profile",
         "/register",
-        "/team"
+        "/team",
+        "/transactions"
       ]
     },
     "/": {
@@ -299,6 +322,9 @@ export const routeTree = rootRoute
     },
     "/team": {
       "filePath": "team.lazy.tsx"
+    },
+    "/transactions": {
+      "filePath": "transactions.lazy.tsx"
     }
   }
 }

@@ -37,7 +37,7 @@ export default function Form({title, description, inputs, className, callBack, c
                 const value = field[1];
                 const input = filteredInputs.find((i) => i.name === name)?.rules ?? [];
                 if(typeof value.value === 'string') {
-                    value.value = value.value.trim();
+                    return value.errors.length > 0 || (input.length > 0 && value.value.trim() == "");
                 }
                 return value.errors.length > 0 || (input.length > 0 && value.value == "");
             }
@@ -75,7 +75,7 @@ export default function Form({title, description, inputs, className, callBack, c
             const value = field[1];
             const input = filteredInputs.find((i) => i.name === name)?.rules ?? [];
             if(typeof value.value === 'string') {
-                value.value = value.value.trim();
+                return value.errors.length > 0 || (input.length > 0 && value.value.trim() == "");
             }
             return value.errors.length > 0 || (input.length > 0 && value.value == "");
         }
