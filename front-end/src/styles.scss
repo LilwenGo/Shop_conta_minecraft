@@ -177,16 +177,23 @@ main {
 }
 
 #content {
-  @include flex-x(center, center, wrap);
+  @include flex-x(center, flex-start);
   width: 100%;
   height: 100%;
   padding: 1.5rem;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
   background-image: url("/images/back.webp");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+
+  .scroll-wrapper {
+    @include flex-x(center, center, wrap);
+    gap: 24px;
+    max-width: 100%;
+    width: 100%;
+    margin: auto;
+  }
 }
 
 .card {

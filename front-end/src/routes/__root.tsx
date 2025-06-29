@@ -16,7 +16,7 @@ export const Route = createRootRoute({
             {isLogued() && (
               <NavLink to="/team">Équipe</NavLink>
             )}
-            {hasRole("Membre") && (
+            {hasRole(["Responsable","Moderateur","Membre"]) && (
               <>
                 <NavLink to="/items">Items</NavLink>
                 <NavLink to="/transactions">Transactions</NavLink>
@@ -24,7 +24,9 @@ export const Route = createRootRoute({
             )}
           </nav>
           <section id="content">
-            <Outlet />
+            <div className="scroll-wrapper">
+              <Outlet />
+            </div>
           </section>
         </main>
       </>
