@@ -10,7 +10,7 @@ type AuthContextType = {
   user: User | null
   login: (user: User) => void
   logout: () => void
-  hasRole: (role: string) => boolean
+  hasRole: (role: string | string[]) => boolean
   isModerator: () => boolean
   isLogued: () => boolean
   getUserId: () => string | null
@@ -34,8 +34,9 @@ export function AuthProvider({ children }: { children: React.ReactNode}) {
     localStorage.removeItem('user');
   };
 
-  const hasRole = (role: string) => {
-    return user?.roles.includes(role) ?? false;
+  const hasRole = (role: string | string[]) => {
+    const rolesToCheck = Array.isArray(role) ? role : [role];
+    return user?.roles.some((r: string) => rolesToCheck.includes(r)) ?? false;
   };
 
   const isModerator = () => {

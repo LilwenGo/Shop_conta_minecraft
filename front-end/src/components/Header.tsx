@@ -36,7 +36,7 @@ export default function Header() {
           {isLogued() && (
             <NavLink to="/team">Équipe</NavLink>
           )}
-          {hasRole("Membre") && (
+          {hasRole(["Responsable","Moderateur","Membre"]) && (
             <>
               <NavLink to="/items">Items</NavLink>
               <NavLink to="/transactions">Transactions</NavLink>

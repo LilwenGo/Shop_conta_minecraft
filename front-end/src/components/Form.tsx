@@ -36,7 +36,10 @@ export default function Form({title, description, inputs, className, callBack, c
                 const name = field[0];
                 const value = field[1];
                 const input = filteredInputs.find((i) => i.name === name)?.rules ?? [];
-                return value.errors.length > 0 || (input.length > 0 && value.value.trim() === "");
+                if(typeof value.value === 'string') {
+                    value.value = value.value.trim();
+                }
+                return value.errors.length > 0 || (input.length > 0 && value.value == "");
             }
         );
         if(hasErrors) {
@@ -71,7 +74,10 @@ export default function Form({title, description, inputs, className, callBack, c
             const name = field[0];
             const value = field[1];
             const input = filteredInputs.find((i) => i.name === name)?.rules ?? [];
-            return value.errors.length > 0 || (input.length > 0 && value.value.trim() === "");
+            if(typeof value.value === 'string') {
+                value.value = value.value.trim();
+            }
+            return value.errors.length > 0 || (input.length > 0 && value.value == "");
         }
     );
 
