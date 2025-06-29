@@ -206,14 +206,11 @@ class MembreController extends AbstractController {
 
     #[Route('/membres/{id}', 'delete_membre', methods: 'DELETE')]
     public function delete(MembreService $service, string $id): JsonResponse {
-        if(!$this->isGranted('ROLE_MODERATOR') && !$this->isGranted('ROLE_MANAGER')) {
-            return new JsonResponse(['success' => false, 'error' => 'Unauthorized'], 403);
-        }
         $membre = $service->getById($id);
         if(!$membre) {
-            return new JsonResponse(['error' => 'Membre to update not found'], 404);
+            return new JsonResponse(['error' => 'Membre to delete not found'], 404);
         }
-        if($membre->getTeam()->getId() !== $this->getUser()->getTeam()->getId()) {
+        if($membre->getId() !== $this->getUser()->getId() || $this->isGranted('ROLE_ADMIN')) {
             return new JsonResponse(['success' => false, 'error' => 'Unauthorized'], 403);
         }
         try {

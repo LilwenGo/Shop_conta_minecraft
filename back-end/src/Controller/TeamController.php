@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Entity\Membre;
 use App\Entity\Team;
+use App\Service\ItemService;
 use App\Service\MembreService;
 use App\Service\RoleService;
 use App\Service\TeamService;
@@ -134,7 +135,7 @@ class TeamController extends AbstractController {
     }
 
     #[Route('/fire', 'remove_membre', methods: 'PUT')]
-    public function removeMembre(Request $request, MembreService $service): JsonResponse {
+    public function removeMembre(Request $request, MembreService $service, ItemService $iService): JsonResponse {
         if(!$this->isGranted('ROLE_MODERATOR') && !$this->isGranted('ROLE_MANAGER')) {
             return new JsonResponse(['success' => false, 'error' => 'Unauthorized'], 403);
         }
@@ -149,15 +150,21 @@ class TeamController extends AbstractController {
         }
         $membre = $service->getById($data['membreId']);
         if(!$membre) {
-            return new JsonResponse(['success' => false, 'error' => 'Membre to add not found'], 404);
+            return new JsonResponse(['success' => false, 'error' => 'Membre to remove not found'], 404);
+        }
+        if(in_array('ROLE_MANAGER', $membre->getRoles())) {
+            return new JsonResponse(['success' => false, 'error' => 'You cannot fire this membre because he is the team owner'], 403);
         }
         if($membre->getTeam() !== $team) {
-            return new JsonResponse(['success' => false, 'error' => 'You cannot update this membre because you aren\'t in his team'], 403);
+            return new JsonResponse(['success' => false, 'error' => 'You cannot fire this membre because you aren\'t in his team'], 403);
         }
         $membre->setTeam(null);
         foreach($membre->getRawRoles()->toArray() as $rawRole) {
             $membre->getRawRoles()->removeElement($rawRole);
             $rawRole->getMembres()->removeElement($membre);
+        }
+        if($membre->getItems()->count() > 0) {
+            $iService->transferItems($membre, $team->getOwner());
         }
         try {
             $service->save($membre);
