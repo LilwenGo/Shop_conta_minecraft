@@ -22,6 +22,7 @@ const RegisterLazyImport = createFileRoute('/register')()
 const ProfileLazyImport = createFileRoute('/profile')()
 const LogoutLazyImport = createFileRoute('/logout')()
 const LoginLazyImport = createFileRoute('/login')()
+const ItemsLazyImport = createFileRoute('/items')()
 const FormTestLazyImport = createFileRoute('/form-test')()
 const AboutLazyImport = createFileRoute('/about')()
 
@@ -56,6 +57,12 @@ const LoginLazyRoute = LoginLazyImport.update({
   path: '/login',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/login.lazy').then((d) => d.Route))
+
+const ItemsLazyRoute = ItemsLazyImport.update({
+  id: '/items',
+  path: '/items',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/items.lazy').then((d) => d.Route))
 
 const FormTestLazyRoute = FormTestLazyImport.update({
   id: '/form-test',
@@ -98,6 +105,13 @@ declare module '@tanstack/react-router' {
       path: '/form-test'
       fullPath: '/form-test'
       preLoaderRoute: typeof FormTestLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/items': {
+      id: '/items'
+      path: '/items'
+      fullPath: '/items'
+      preLoaderRoute: typeof ItemsLazyImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -144,6 +158,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutLazyRoute
   '/form-test': typeof FormTestLazyRoute
+  '/items': typeof ItemsLazyRoute
   '/login': typeof LoginLazyRoute
   '/logout': typeof LogoutLazyRoute
   '/profile': typeof ProfileLazyRoute
@@ -155,6 +170,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutLazyRoute
   '/form-test': typeof FormTestLazyRoute
+  '/items': typeof ItemsLazyRoute
   '/login': typeof LoginLazyRoute
   '/logout': typeof LogoutLazyRoute
   '/profile': typeof ProfileLazyRoute
@@ -167,6 +183,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutLazyRoute
   '/form-test': typeof FormTestLazyRoute
+  '/items': typeof ItemsLazyRoute
   '/login': typeof LoginLazyRoute
   '/logout': typeof LogoutLazyRoute
   '/profile': typeof ProfileLazyRoute
@@ -180,6 +197,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/form-test'
+    | '/items'
     | '/login'
     | '/logout'
     | '/profile'
@@ -190,6 +208,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/form-test'
+    | '/items'
     | '/login'
     | '/logout'
     | '/profile'
@@ -200,6 +219,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/form-test'
+    | '/items'
     | '/login'
     | '/logout'
     | '/profile'
@@ -212,6 +232,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutLazyRoute: typeof AboutLazyRoute
   FormTestLazyRoute: typeof FormTestLazyRoute
+  ItemsLazyRoute: typeof ItemsLazyRoute
   LoginLazyRoute: typeof LoginLazyRoute
   LogoutLazyRoute: typeof LogoutLazyRoute
   ProfileLazyRoute: typeof ProfileLazyRoute
@@ -223,6 +244,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutLazyRoute: AboutLazyRoute,
   FormTestLazyRoute: FormTestLazyRoute,
+  ItemsLazyRoute: ItemsLazyRoute,
   LoginLazyRoute: LoginLazyRoute,
   LogoutLazyRoute: LogoutLazyRoute,
   ProfileLazyRoute: ProfileLazyRoute,
@@ -243,6 +265,7 @@ export const routeTree = rootRoute
         "/",
         "/about",
         "/form-test",
+        "/items",
         "/login",
         "/logout",
         "/profile",
@@ -258,6 +281,9 @@ export const routeTree = rootRoute
     },
     "/form-test": {
       "filePath": "form-test.lazy.tsx"
+    },
+    "/items": {
+      "filePath": "items.lazy.tsx"
     },
     "/login": {
       "filePath": "login.lazy.tsx"
