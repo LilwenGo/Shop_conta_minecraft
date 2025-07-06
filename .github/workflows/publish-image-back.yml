@@ -11,7 +11,7 @@ jobs:
 
     env:
       REGISTRY: ghcr.io
-      IMAGE_NAME: scfm-php
+      IMAGE_NAME: ${{ github.repository_owner }}/scfm-php
 
     runs-on: ubuntu-latest
     permissions:
