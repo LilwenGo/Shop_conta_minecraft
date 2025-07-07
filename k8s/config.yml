@@ -1,0 +1,378 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: scfm-prod
+  labels:
+    name: scfm-prod
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scfm-php-configmap
+  namespace: scfm-prod
+data:
+  APP_ENV: "prod"
+  JWT_SECRET_KEY: "%kernel.project_dir%/config/jwt/private.pem"
+  JWT_PUBLIC_KEY: "%kernel.project_dir%/config/jwt/public.pem"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: scfm-php-secret
+  namespace: scfm-prod
+type: Opaque
+data:
+  APP_SECRET: "Change-me"
+  DATABASE_URL: "Change-me"
+  JWT_PASSPHRASE: "Change-me"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scfm-db-configmap
+  namespace: scfm-prod
+data:
+  MYSQL_DATABASE: "scfm"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: scfm-db-secret
+  namespace: scfm-prod
+type: Opaque
+data:
+  MYSQL_USER: "Change-me"
+  MYSQL_PASSWORD: "Change-me"
+  MYSQL_ROOT_PASSWORD: "Change-me"
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: scfm-php-job
+spec:
+  template:
+    spec:
+      containers:
+        - name: scfm-doctrine-init-database
+          image: ghcr.io/lilwengo/scfm-php:2.0.5
+          command: ["php", "bin/console", "doctrine:schema:update", "--force", "--no-interaction"]
+          envFrom:
+            - configMapRef:
+                name: scfm-php-configmap
+            - secretRef:
+                name: scfm-php-secret
+      restartPolicy: OnFailure
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: scfm-php-jwt-job
+spec:
+  template:
+    spec:
+      containers:
+        - name: scfm-php-jwt-generator
+          image: ghcr.io/lilwengo/scfm-php:2.0.5
+          command: ["php", "bin/console", "lexik:jwt:generate-keypair", "--no-interaction"]
+          env:
+            - name: JWT_PASSPHRASE
+              valueFrom:
+                secretKeyRef:
+                  name: symfony-secrets
+                  key: jwt_passphrase
+          volumeMounts:
+            - name: scfm-php-jwt-volume
+              mountPath: /var/www/html/config/jwt
+      restartPolicy: OnFailure
+      volumes:
+        - name: scfm-php-jwt-volume
+          persistentVolumeClaim:
+            claimName: scfm-php-jwt-claim
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scfm-nginx-deployment
+  namespace: scfm-prod
+  labels:
+    app: scfm-nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scfm-nginx
+  template:
+    metadata:
+      labels:
+        app: scfm-nginx
+    spec:
+      terminationGracePeriodSeconds: 10
+      volumes:
+        - name: scfm-nginx-tls-secret
+          secret:
+            secretName: scfm-nginx-tls
+      containers:
+        - name: scfm-nginx-container
+          image: "ghcr.io/lilwengo/scfm-nginx:2.0.4"
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: scfm-nginx-configmap
+            - secretRef:
+                name: scfm-nginx-secret
+          volumeMounts:
+            - name: scfm-nginx-tls-secret
+              mountPath: /etc/nginx/ssl
+              readOnly: true
+          ports:
+            - containerPort: 443
+          resources:
+            requests:
+              cpu: "128m"
+              memory: "256Mi"
+            limits:
+              cpu: "256m"
+              memory: "512Mi"
+          livenessProbe:
+            tcpSocket:
+              port: 443
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 60
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: scfm-nginx-service
+  namespace: scfm-prod
+  labels:
+    app: scfm-nginx
+spec:
+  type: ClusterIP
+  selector:
+    app: scfm-nginx
+  ports:
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: 443
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scfm-php-deployment
+  namespace: scfm-prod
+  labels:
+    app: scfm-php
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scfm-php
+  template:
+    metadata:
+      labels:
+        app: scfm-php
+    spec:
+      terminationGracePeriodSeconds: 10
+      volumes:
+        - name: scfm-php-jwt-volume
+          persistentVolumeClaim:
+            claimName: scfm-php-jwt-claim
+      containers:
+        - name: scfm-php-container
+          image: "ghcr.io/lilwengo/scfm-php:2.0.4"
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: scfm-php-configmap
+            - secretRef:
+                name: scfm-php-secret
+          volumeMounts:
+            - name: scfm-php-jwt-volume
+              mountPath: /var/www/html/config/jwt
+          ports:
+            - containerPort: 9000
+          resources:
+            requests:
+              cpu: "128m"
+              memory: "256Mi"
+            limits:
+              cpu: "256m"
+              memory: "512Mi"
+          livenessProbe:
+            tcpSocket:
+              port: 9000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 60
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: scfm-php-service
+  namespace: scfm-prod
+  labels:
+    app: scfm-php
+spec:
+  type: ClusterIP
+  selector:
+    app: scfm-php
+  ports:
+    - name: http
+      port: 9000
+      protocol: TCP
+      targetPort: 9000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scfm-db-deployment
+  namespace: scfm-prod
+  labels:
+    app: scfm-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scfm-db
+  template:
+    metadata:
+      labels:
+        app: scfm-db
+    spec:
+      terminationGracePeriodSeconds: 10
+      volumes:
+        - name: scfm-db-volume
+          persistentVolumeClaim:
+            claimName: scfm-db-claim
+      containers:
+        - name: scfm-db-container
+          image: "mysql:8.0.36"
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: scfm-db-configmap
+            - secretRef:
+                name: scfm-db-secret
+          volumeMounts:
+            - name: scfm-db-volume
+              mountPath: /var/lib/mysql
+          ports:
+            - containerPort: 3306
+          resources:
+            requests:
+              cpu: "128m"
+              memory: "256Mi"
+            limits:
+              cpu: "256m"
+              memory: "512Mi"
+          livenessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 60
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: scfm-db-service
+  namespace: scfm-prod
+  labels:
+    app: scfm-db
+spec:
+  type: ClusterIP
+  selector:
+    app: scfm-db
+  ports:
+    - name: http
+      port: 3306
+      protocol: TCP
+      targetPort: 3306
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: scfm-ingress
+  namespace: scfm-prod
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  tls:
+  - hosts:
+    - scfm.hoststudio.fr
+    secretName: scfm-nginx-tls
+  rules:
+  - host: scfm.hoststudio.fr
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: scfm-nginx-service
+            port:
+              number: 443
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: scfm-db-volume
+  namespace: scfm-prod
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 100Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/var/local/scfm-db-volume"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: scfm-db-claim
+  namespace: scfm-prod
+  labels:
+    app: scfm-db
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Mi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: scfm-php-jwt-volume
+  namespace: scfm-prod
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 100Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/var/local/scfm-php-jwt-volume"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: scfm-php-jwt-claim
+  namespace: scfm-prod
+  labels:
+    app: scfm-php
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Mi
