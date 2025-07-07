@@ -16,9 +16,9 @@ server {
 
     # Handle API requests
     location /api {
-        root /var/www/Shop_conta_minecraft/back-end/public;
+        root /var/www/html/public;
         fastcgi_pass php:9000;
-        fastcgi_param SCRIPT_FILENAME /var/www/Shop_conta_minecraft/back-end/public/index.php;
+        fastcgi_param SCRIPT_FILENAME /var/www/html/public/index.php;
         include fastcgi_params;
     }
 

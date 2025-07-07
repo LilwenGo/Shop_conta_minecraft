@@ -54,7 +54,7 @@ spec:
     spec:
       containers:
         - name: scfm-doctrine-init-database
-          image: ghcr.io/lilwengo/scfm-php:2.0.5
+          image: ghcr.io/lilwengo/scfm-php:2.0.6
           command: ["php", "bin/console", "doctrine:schema:update", "--force", "--no-interaction"]
           envFrom:
             - configMapRef:
@@ -72,14 +72,14 @@ spec:
     spec:
       containers:
         - name: scfm-php-jwt-generator
-          image: ghcr.io/lilwengo/scfm-php:2.0.5
+          image: ghcr.io/lilwengo/scfm-php:2.0.6
           command: ["php", "bin/console", "lexik:jwt:generate-keypair", "--no-interaction"]
           env:
             - name: JWT_PASSPHRASE
               valueFrom:
                 secretKeyRef:
-                  name: symfony-secrets
-                  key: jwt_passphrase
+                  name: scfm-php-secret
+                  key: JWT_PASSPHRASE
           volumeMounts:
             - name: scfm-php-jwt-volume
               mountPath: /var/www/html/config/jwt
@@ -113,13 +113,8 @@ spec:
             secretName: scfm-nginx-tls
       containers:
         - name: scfm-nginx-container
-          image: "ghcr.io/lilwengo/scfm-nginx:2.0.4"
+          image: "ghcr.io/lilwengo/scfm-nginx:2.0.6"
           imagePullPolicy: Always
-          envFrom:
-            - configMapRef:
-                name: scfm-nginx-configmap
-            - secretRef:
-                name: scfm-nginx-secret
           volumeMounts:
             - name: scfm-nginx-tls-secret
               mountPath: /etc/nginx/ssl
@@ -181,7 +176,7 @@ spec:
             claimName: scfm-php-jwt-claim
       containers:
         - name: scfm-php-container
-          image: "ghcr.io/lilwengo/scfm-php:2.0.4"
+          image: "ghcr.io/lilwengo/scfm-php:2.0.6"
           imagePullPolicy: Always
           envFrom:
             - configMapRef:
